@@ -20,5 +20,7 @@
     "qrcode": "^1.4.4",
     "vuex-persistedstate": "^3.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@amap/amap-jsapi-loader": "^0.0.1"
+  }
 }

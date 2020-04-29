@@ -12,10 +12,10 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_axios_120ef1f8 from 'nuxt_plugin_axios_120ef1f8' // Source: ./axios.js (mode: 'all')
-import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ../plugins/element-ui (mode: 'all')
-import nuxt_plugin_localStorage_830ec59e from 'nuxt_plugin_localStorage_830ec59e' // Source: ../plugins/localStorage.js (mode: 'client')
-import nuxt_plugin_axios_2228ef02 from 'nuxt_plugin_axios_2228ef02' // Source: ../plugins/axios (mode: 'all')
+import nuxt_plugin_axios_8e5d5ee2 from 'nuxt_plugin_axios_8e5d5ee2' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
+import nuxt_plugin_localStorage_830ec59e from 'nuxt_plugin_localStorage_830ec59e' // Source: ..\\plugins\\localStorage.js (mode: 'client')
+import nuxt_plugin_axios_2228ef02 from 'nuxt_plugin_axios_2228ef02' // Source: ..\\plugins\\axios (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -177,8 +177,8 @@ async function createApp (ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_axios_120ef1f8 === 'function') {
-    await nuxt_plugin_axios_120ef1f8(app.context, inject)
+  if (typeof nuxt_plugin_axios_8e5d5ee2 === 'function') {
+    await nuxt_plugin_axios_8e5d5ee2(app.context, inject)
   }
 
   if (typeof nuxt_plugin_elementui_d905880e === 'function') {
