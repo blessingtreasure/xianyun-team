@@ -3,38 +3,28 @@
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{path:'/hotel'}">广州酒店</el-breadcrumb-item>
-      <el-breadcrumb-item>锦江之星(吴泾痁)</el-breadcrumb-item>
+      <el-breadcrumb-item v-for="(item, index) in hotelDetail.breadcrumb" :key="index">{{item}}</el-breadcrumb-item>
+      <!-- {{hotelDetail.breadcrumb}} -->
     </el-breadcrumb>
     <div class="hotel">
-      <h3>锦江之星(吴经店)</h3>
-      <div class="pingyin">jin jiang zhi xing (shang hai min bang wu jiang dian)</div>
+      <h3>{{hotelDetail.name}}</h3>
+      <div class="pingyin">{{hotelDetail.alias}}</div>
       <div class="hotel-location">
         <i class="el-icon-location"></i>
-        剑川路165号(近龙吴路)
+        {{hotelDetail.address}}
       </div>
       <el-row :gutter="15">
         <el-col :span="16" class="hotel-img-big">
-          <img src="http://157.122.54.189:9093/images/hotel-pics/2.jpeg" alt />
+          <img :src="`/images/${bigImg}.jpeg`" alt />
         </el-col>
         <el-col :span="8" class="hotel-img-small">
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" alt />
-          </div>
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/2.jpeg" alt />
-          </div>
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" alt />
-          </div>
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" alt />
-          </div>
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" alt />
-          </div>
-          <div class="img-wrap">
-            <img src="http://157.122.54.189:9093/images/hotel-pics/1.jpeg" alt />
+          <div
+            class="img-wrap"
+            v-for="(item, index) in 6"
+            :key="index"
+            @click="handleImgChoose(item)"
+          >
+            <img :src="`/images/${item}.jpeg`" alt />
           </div>
         </el-col>
       </el-row>
@@ -45,63 +35,70 @@
         <el-col :span="8" class="middle">低价房源</el-col>
         <el-col :span="8" class="bottom">最低价格/每晚</el-col>
       </el-row>
-      <el-row class="form">
-        <el-col :span="8">携程</el-col>
-        <el-col :span="8" class="middle">高级大床房A</el-col>
+      <!-- 酒店来源 -->
+      <el-row class="form" v-for="(item, index) in hotelDetail.products" :key="index">
+        <el-col :span="8">{{item.name}}</el-col>
+        <el-col :span="8" class="middle">{{item.bestType}}</el-col>
         <el-col :span="8" class="bottom">
-          <span class="orange">￥ 254</span>
-          <i>起</i>
-          <span class="orange">></span>
-        </el-col>
-      </el-row>
-      <el-row class="form">
-        <el-col :span="8">携程</el-col>
-        <el-col :span="8" class="middle">高级大床房A</el-col>
-        <el-col :span="8" class="bottom">
-          <span class="orange">￥ 254</span>
+          <span class="orange">￥ {{item.price}}</span>
           <i>起</i>
           <span class="orange">></span>
         </el-col>
       </el-row>
     </div>
     <div class="map">
-      <script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd"></script>
+      <script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd&plugin=AMap.Driving,AMap.PlaceSearch"></script>
       <div id="map-container"></div>
-      <div class="traffic"></div>
+      <div class="traffic">
+        <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
+          <el-tab-pane label="景点" name="景点"></el-tab-pane>
+          <el-tab-pane label="交通" name="公交，地铁站"></el-tab-pane>
+        </el-tabs>
+        <div id="panel"></div>
+      </div>
     </div>
     <div class="hotel-info">
       <el-row>
         <el-col :span="4">基本信息</el-col>
         <el-col :span="5">入住时间: 14:00之后</el-col>
         <el-col :span="5">离店时间: 12:00之前</el-col>
-        <el-col :span="5">2004年开业/2007装修</el-col>
-        <el-col :span="5">酒店规模: 216间客房</el-col>
+        <el-col :span="5">{{hotelDetail.creation_time}}/{{hotelDetail.renovat_time}}</el-col>
+        <el-col :span="5">酒店规模: {{hotelDetail.roomCount}}间客房</el-col>
       </el-row>
       <el-row>
         <el-col :span="4">主要设施</el-col>
+        <el-col :span="20">
+          <el-tag
+            type="info"
+            v-for="(item,index) in hotelDetail.hotelassets"
+            :key="index"
+          >{{item.name}}</el-tag>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="4">停车服务</el-col>
+        <el-col :span="20">{{hotelDetail.parking}}</el-col>
       </el-row>
       <el-row>
         <el-col :span="4">品牌信息</el-col>
+        <el-col :span="20" v-if="hotelDetail.hotelbrand">{{hotelDetail.hotelbrand.name}}</el-col>
       </el-row>
     </div>
     <div class="comments">
-      <h4>0条真实用户评论</h4>
+      <h4>{{total}}条真实用户评论</h4>
       <el-row class="comments-main" :gutter="20">
         <el-col :span="3" class="comments-total">
-          <div>总评数: 148</div>
-          <div>好评数: 43</div>
-          <div>差评数: 5</div>
+          <div>总评数: {{hotelDetail.all_remarks}}</div>
+          <div>好评数: {{hotelDetail.good_remarks}}</div>
+          <div>差评数: {{hotelDetail.bad_remarks}}</div>
         </el-col>
         <el-col :span="5" class="recomment">
           <div class="recomment-stars">
-            <div class="remoment-bg">
-            推荐
-          </div>
+            <div class="remoment-bg" v-if="hotelDetail.stars<=2">一般</div>
+            <div class="remoment-bg" v-else-if="hotelDetail.stars<4">推荐</div>
+            <div class="remoment-bg" v-else>非常推荐</div>
             <el-rate
-              v-model="value"
+              v-model="hotelDetail.stars"
               disabled
               show-score
               :max="5"
@@ -113,63 +110,160 @@
         </el-col>
         <el-col :span="15" class="score">
           <div class="score-item">
-            <canvas width="70" height="70" class="canvas"></canvas>
+            <Canvas :score="hotelDetail.scores.environment" />
             <span>环境</span>
-            <span>7.4</span>
+            <span>{{hotelDetail.scores.environment}}</span>
           </div>
           <div class="score-item">
-            <canvas width="70" height="70" class="canvas"></canvas>
+            <Canvas :score="hotelDetail.scores.product" />
             <span>产品</span>
-            <span>7.2</span>
+            <span>{{hotelDetail.scores.product}}</span>
           </div>
           <div class="score-item">
-            <canvas width="70" height="70" class="canvas"></canvas>
+            <Canvas :score="hotelDetail.scores.service" />
             <span>服务</span>
-            <span>7.9</span>
+            <span>{{hotelDetail.scores.service}}</span>
           </div>
         </el-col>
       </el-row>
+       <!-- 评论列表 -->
+        <div class="comment-list">
+          <CommentItem v-for="(item, index) in comments" :key="index" :item="item" :is-last="true" />
+          <div v-if="comments.length<=0" class="comment-none">
+            暂无评论~
+          </div>
+        </div>
     </div>
+
   </div>
 </template>
-  <script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd&plugin=AMap.Driving,AMap.PlaceSearch"></script>
 
 <script>
 // import AMapLoader from "@amap/amap-jsapi-loader";
+import Canvas from "@/components/hotel/canvas";
+import CommentItem from "@/components/hotel/CommentItem";
 export default {
   data() {
     return {
-      value: 3.7
+      value: 3.7,
+      // 酒店详情
+      hotelDetail: {
+        scores: {}
+      },
+      // 大图片的路径
+      bigImg: 1,
+      // 地图标签页显示,默认显示景点
+      map: null,
+      activeName:'景点',
+      // 评论
+      comments:[{
+        pics:[]
+      }],
+      total:0
     };
   },
-  mounted() {
-    setTimeout(() => {
+  components: {
+    Canvas,
+    CommentItem
+  },
+  async mounted() {
+    await this.getHotelDetail();
+     this.getComments()
+   setTimeout(()=>{
       this.setMap();
-      this.setCanvas();
-    }, 30);
+   },50)
+   
   },
   methods: {
+    // 设置地图
     setMap() {
-      var map = new AMap.Map("map-container", {
-        zoom: 12
+      let { longitude, latitude } = this.hotelDetail.location;
+      this.map = new AMap.Map("map-container", {
+        zoom: 12,
+        center: [longitude, latitude]
+      });
+      // 酒店图标
+      var hotelIcon = new AMap.Icon({
+        size: new AMap.Size(40, 40), // 图标尺寸
+        image: "/images/location_icon_hotel.png", // Icon的图像
+        // imageOffset: new AMap.Pixel(0, -60), // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(40, 40) // 根据所设置的大小拉伸或压缩图片
+      });
+      // 酒店标记
+      var hotelMarker = new AMap.Marker({
+        position: new AMap.LngLat(longitude, latitude),
+        icon: hotelIcon,
+        title: this.hotelDetail.name,
+        animation: "AMAP_ANIMATION_DROP"
+      });
+      // 酒店文本
+      var text = new AMap.Text({
+        text: this.hotelDetail.name,
+        map:this.map,
+        offset: new AMap.Pixel(10, -50),
+        position: new AMap.LngLat(longitude, latitude)
+      });
+      this.map.add(hotelMarker);
+      this.mapSearch()
+    },
+    
+    // 获取酒店详情
+    getHotelDetail() {
+      return new Promise(async (resolve, reject) => {
+        let { id } = this.$route.query;
+        let { data: res } = await this.$axios({
+          url: "/hotels",
+          params: {
+            id
+          }
+        });
+        res.data[0].breadcrumb = res.data[0].breadcrumb.split(" > ");
+        this.hotelDetail = res.data[0];
+        resolve(this.hotelDetail);
       });
     },
-    setCanvas() {
-      let canvas = document.querySelectorAll(".canvas");
-      canvas.forEach(item => {
-        draw(item);
-      });
-      function draw(canvas) {
-        if (!canvas.getContext) return;
-        let ctx = canvas.getContext("2d");
-        ctx.beginPath();
-        ctx.arc(35, 35, 34, 0, Math.PI * 2 * 0.7);
-        ctx.strokeStyle = "#ff9900";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+    // 点击更换图片
+    handleImgChoose(src) {
+      this.bigImg = src;
+    },
+    // 地图搜索
+    mapSearch(){
+      AMap.service(["AMap.PlaceSearch"], () => {
+          //构造地点查询类
+          var placeSearch = new AMap.PlaceSearch({
+            pageSize: 15, // 单页显示结果条数
+            pageIndex: 1, // 页码
+            city: this.hotelDetail.real_city, // 兴趣点城市
+            citylimit: true, //是否强制限制在设置的城市内搜索
+            map: this.map, // 展现结果的地图实例
+            panel: "panel", // 结果列表将在此容器中进行展示。
+            autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+          });
+          //关键字查询
+          placeSearch.search(this.activeName);
+        });
+    },
+    handleClick(item) {},
+    // 获取酒店评论
+   async getComments(){
+      const {id} = this.$route.query
+      const {data:res} = await this.$axios({
+        url:'/hotels/comments',
+        params:{
+          hotel:id
+        }
+      })
+      this.comments = res.data
+      this.total = res.total
+    }
+  },
+  watch: {
+      activeName() {
+        this.mapSearch()
+        return ''
       }
     }
-  }
 };
 </script>
 
@@ -207,6 +301,7 @@ export default {
       .img-wrap {
         float: left;
         margin-bottom: 14px;
+        cursor: pointer;
         &:nth-child(2n-1) {
           margin-right: 15px;
         }
@@ -249,6 +344,9 @@ export default {
     }
   }
 }
+/deep/ .amap_lib_placeSearch {
+  border: none !important;
+}
 .map {
   overflow: hidden;
   margin: 40px 0;
@@ -258,10 +356,16 @@ export default {
     float: left;
   }
   .traffic {
-    width: 400px;
+    padding-left: 20px;
+    width: 380px;
     height: 400px;
     float: right;
-    background: red;
+    #panel {
+      background-color: white;
+      height: 350px;
+      width: 100%;
+      overflow: auto;
+    }
   }
 }
 .hotel-info {
@@ -273,24 +377,24 @@ export default {
 }
 .comments {
   margin: 20px 0;
-  h4{
+  h4 {
     padding: 24px 0;
   }
   .comments-main {
-    .el-col{
+    .el-col {
       height: 70px;
     }
-    .comments-total{
-      color:#333;
+    .comments-total {
+      color: #333;
     }
     .recomment {
-      .recomment-stars{
+      .recomment-stars {
         position: relative;
         height: 100%;
         display: flex;
         align-items: center;
         padding-left: 36px;
-        /deep/ i{
+        /deep/ i {
           font-size: 22px;
           margin-right: 2px;
         }
@@ -324,12 +428,17 @@ export default {
         position: relative;
         color: #ff9900;
         margin-left: 50px;
-        .canvas {
-          position: absolute;
-          transform: rotate(-90deg);
-        }
       }
     }
+  }
+  .comment-list{
+    margin-top: 40px;
+  }
+  .comment-none{
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    color:#999;
   }
 }
 </style>
