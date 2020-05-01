@@ -177,16 +177,14 @@ import moment from "moment";
 export default {
   computed: {
     //   将vuex中的数据保存到data中
-    getlocation() {
-
-    }
+    getlocation() {}
   },
   mounted() {
     // 首次进入获取当前城市列表
     this.$axios({
       url: "/cities",
       params: {
-        name: "上海市"
+        name: this.locationCity
       }
     }).then(res => {
       const { scenics } = res.data.data[0];
