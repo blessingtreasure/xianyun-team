@@ -178,11 +178,7 @@ export default {
   computed: {
     //   将vuex中的数据保存到data中
     getlocation() {
-      // return (this.location = this.$store.state.hotel.hotelList.data.map(
-      //   item => {
-      //     return item.location;
-      //   }
-      // ));
+
     }
   },
   mounted() {
@@ -190,13 +186,16 @@ export default {
     this.$axios({
       url: "/cities",
       params: {
-        name: this.locationCity
+        name: "上海市"
       }
     }).then(res => {
       const { scenics } = res.data.data[0];
       this.scenics = scenics;
       this.cityId = res.data.data[0].id;
+      // 获取酒店列表
+      this.searchInfo();
     });
+
     setTimeout(() => {
       this.getMap();
     }, 600);
@@ -386,9 +385,9 @@ export default {
     },
     // 查询酒店列表信息
     searchInfo() {
-      if (!this.enterTime && !this.leftTime && !this.cityId) {
-        return this.$message.error("请填写搜索内容！");
-      }
+      // if (!this.enterTime && !this.leftTime && !this.cityId) {
+      //   return this.$message.error("请填写搜索内容！");
+      // }
       // 字段: hotels,enterTime,leftTime
       this.$axios({
         url: "/hotels",
@@ -401,6 +400,8 @@ export default {
           city: this.cityId
         }
       }).then(res => {
+        console.log(this.cityId);
+
         this.hotelList = res.data;
         this.$store.commit("hotel/setHotelList", this.hotelList);
         this.$store.commit("hotel/setFilter", {
