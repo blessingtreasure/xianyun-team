@@ -151,6 +151,9 @@ export default {
     font-weight: normal;
     color: #999;
   }
+  /deep/.el-rate__icon {
+    margin-right: 3px;
+  }
   .listItem {
     height: 265px;
     box-sizing: border-box;
