@@ -178,10 +178,25 @@ export default {
   computed: {
     //   将vuex中的数据保存到data中
     getlocation() {
-      return (this.location = this.$store.state.hotel.hotelList);
+      // return (this.location = this.$store.state.hotel.hotelList.data.map(
+      //   item => {
+      //     return item.location;
+      //   }
+      // ));
     }
   },
   mounted() {
+    // 首次进入获取当前城市列表
+    this.$axios({
+      url: "/cities",
+      params: {
+        name: this.locationCity
+      }
+    }).then(res => {
+      const { scenics } = res.data.data[0];
+      this.scenics = scenics;
+      this.cityId = res.data.data[0].id;
+    });
     setTimeout(() => {
       this.getMap();
     }, 600);
@@ -219,6 +234,7 @@ export default {
       states: [],
       //   卡片是否显示
       showCard: false,
+      locationCity: "",
       city: "",
       cityId: "",
       //   酒店信息列表
@@ -385,7 +401,6 @@ export default {
           city: this.cityId
         }
       }).then(res => {
-        // console.log(res);
         this.hotelList = res.data;
         this.$store.commit("hotel/setHotelList", this.hotelList);
         this.$store.commit("hotel/setFilter", {
@@ -410,7 +425,7 @@ export default {
             // 把数据保存到vuex
             that.$store.commit("hotel/setCity", result);
             // 把城市保存到data中
-            // that.city = result.city;
+            that.locationCity = result.city;
           }
         }
       });
