@@ -175,59 +175,16 @@
 <script>
 import moment from "moment";
 export default {
-  created() {},
   computed: {
     //   将vuex中的数据保存到data中
     getlocation() {
-      // return (this.location = this.$store.state.hotel.hotelList.data.map(
-      //   item => {
-      //     return item.location;
-      //   }
-      // ));
-      // this.$store.commit("hotel/setLocation", this.location);
+      return (this.location = this.$store.state.hotel.hotelList);
     }
   },
   mounted() {
-    // 创建地图实例
-    var map = new AMap.Map("container", {
-      //   center: [113.722733, 22.39739], //地图中心点
-      center: this.center,
-      zoom: 8 //地图显示的缩放级别
-    });
-    const city = this.showCityInfo();
-    //   是否显示弹出窗口
-    this.dialogVisible = true;
-
-    // -------------------------
-
-    // ------------------------
-    // 自定义点标记内容
-    var markerContent = document.createElement("div");
-    markerContent.style = "position:relative";
-    // 点标记中的图标
-    var markerImg = document.createElement("img");
-    markerImg.className = "markerlnglat";
-    markerImg.src =
-      "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png";
-    markerImg.style = "width:30px;";
-    // markerImg.position = "relative";
-    markerContent.appendChild(markerImg);
-    // 点标记中的数字
-    var markerNum = document.createElement("span");
-    markerNum.className = "marker-number";
-    markerNum.style =
-      "position:absolute;left:50%;top:50%;transform: translate(-50%, -85%);color:#fff;";
-    markerNum.innerHTML = "9";
-    markerContent.appendChild(markerNum);
-    var marker = new AMap.Marker({
-      // position: position,
-      // 将 html 传给 content
-      content: markerContent,
-      // 以 icon 的 [center bottom] 为原点
-      offset: new AMap.Pixel(-13, -30)
-    });
-    // 将 markers 添加到地图
-    map.add(marker);
+    setTimeout(() => {
+      this.getMap();
+    }, 600);
   },
   data() {
     return {
@@ -289,6 +246,46 @@ export default {
     };
   },
   methods: {
+    getMap() {
+      // 创建地图实例
+
+      var map = new AMap.Map("container", {
+        //   center: [113.722733, 22.39739], //地图中心点
+        center: this.center,
+        zoom: 8 //地图显示的缩放级别
+      });
+      const city = this.showCityInfo();
+      //   是否显示弹出窗口
+      this.dialogVisible = true;
+
+      // -------------------------
+
+      // ------------------------
+      // 自定义点标记内容
+      var markerContent = document.createElement("div");
+      markerContent.style = "position:relative";
+      // 点标记中的图标
+      var markerImg = document.createElement("img");
+      markerImg.className = "markerlnglat";
+      markerImg.src =
+        "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png";
+      markerImg.style = "width:30px;";
+      // markerImg.position = "relative";
+      markerContent.appendChild(markerImg);
+      // 点标记中的数字
+      var markerNum = document.createElement("span");
+      markerNum.className = "marker-number";
+      markerNum.style =
+        "position:absolute;left:50%;top:50%;transform: translate(-50%, -85%);color:#fff;";
+      markerNum.innerHTML = "9";
+      markerContent.appendChild(markerNum);
+      var marker = new AMap.Marker({
+        content: markerContent,
+        offset: new AMap.Pixel(-13, -30)
+      });
+      // 将 markers 添加到地图
+      map.add(marker);
+    },
     //   获取搜索城市方法封装
     getCity(value) {
       return this.$axios({

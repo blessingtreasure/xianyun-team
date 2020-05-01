@@ -47,7 +47,9 @@
       </el-row>
     </div>
     <div class="map">
-      <script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd&plugin=AMap.Driving,AMap.PlaceSearch"></script>
+      <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd&plugin=AMap.Driving,AMap.PlaceSearch"
+      ></script>
       <div id="map-container"></div>
       <div class="traffic">
         <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
@@ -126,15 +128,12 @@
           </div>
         </el-col>
       </el-row>
-       <!-- 评论列表 -->
-        <div class="comment-list">
-          <CommentItem v-for="(item, index) in comments" :key="index" :item="item" :is-last="true" />
-          <div v-if="comments.length<=0" class="comment-none">
-            暂无评论~
-          </div>
-        </div>
+      <!-- 评论列表 -->
+      <div class="comment-list">
+        <CommentItem v-for="(item, index) in comments" :key="index" :item="item" :is-last="true" />
+        <div v-if="comments.length<=0" class="comment-none">暂无评论~</div>
+      </div>
     </div>
-
   </div>
 </template>
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=7179779dbf7533b3b406fdd4449307bd&plugin=AMap.Driving,AMap.PlaceSearch"></script>
@@ -155,12 +154,14 @@ export default {
       bigImg: 1,
       // 地图标签页显示,默认显示景点
       map: null,
-      activeName:'景点',
+      activeName: "景点",
       // 评论
-      comments:[{
-        pics:[]
-      }],
-      total:0
+      comments: [
+        {
+          pics: []
+        }
+      ],
+      total: 0
     };
   },
   components: {
@@ -169,16 +170,16 @@ export default {
   },
   async mounted() {
     await this.getHotelDetail();
-     this.getComments()
-   setTimeout(()=>{
+    this.getComments();
+    setTimeout(() => {
       this.setMap();
-   },50)
-   
+    }, 50);
   },
   methods: {
     // 设置地图
     setMap() {
       let { longitude, latitude } = this.hotelDetail.location;
+
       this.map = new AMap.Map("map-container", {
         zoom: 12,
         center: [longitude, latitude]
@@ -200,14 +201,14 @@ export default {
       // 酒店文本
       var text = new AMap.Text({
         text: this.hotelDetail.name,
-        map:this.map,
+        map: this.map,
         offset: new AMap.Pixel(10, -50),
         position: new AMap.LngLat(longitude, latitude)
       });
       this.map.add(hotelMarker);
-      this.mapSearch()
+      this.mapSearch();
     },
-    
+
     // 获取酒店详情
     getHotelDetail() {
       return new Promise(async (resolve, reject) => {
@@ -228,42 +229,42 @@ export default {
       this.bigImg = src;
     },
     // 地图搜索
-    mapSearch(){
+    mapSearch() {
       AMap.service(["AMap.PlaceSearch"], () => {
-          //构造地点查询类
-          var placeSearch = new AMap.PlaceSearch({
-            pageSize: 15, // 单页显示结果条数
-            pageIndex: 1, // 页码
-            city: this.hotelDetail.real_city, // 兴趣点城市
-            citylimit: true, //是否强制限制在设置的城市内搜索
-            map: this.map, // 展现结果的地图实例
-            panel: "panel", // 结果列表将在此容器中进行展示。
-            autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-          });
-          //关键字查询
-          placeSearch.search(this.activeName);
+        //构造地点查询类
+        var placeSearch = new AMap.PlaceSearch({
+          pageSize: 15, // 单页显示结果条数
+          pageIndex: 1, // 页码
+          city: this.hotelDetail.real_city, // 兴趣点城市
+          citylimit: true, //是否强制限制在设置的城市内搜索
+          map: this.map, // 展现结果的地图实例
+          panel: "panel", // 结果列表将在此容器中进行展示。
+          autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
         });
+        //关键字查询
+        placeSearch.search(this.activeName);
+      });
     },
     handleClick(item) {},
     // 获取酒店评论
-   async getComments(){
-      const {id} = this.$route.query
-      const {data:res} = await this.$axios({
-        url:'/hotels/comments',
-        params:{
-          hotel:id
+    async getComments() {
+      const { id } = this.$route.query;
+      const { data: res } = await this.$axios({
+        url: "/hotels/comments",
+        params: {
+          hotel: id
         }
-      })
-      this.comments = res.data
-      this.total = res.total
+      });
+      this.comments = res.data;
+      this.total = res.total;
     }
   },
   watch: {
-      activeName() {
-        this.mapSearch()
-        return ''
-      }
+    activeName() {
+      this.mapSearch();
+      return "";
     }
+  }
 };
 </script>
 
@@ -431,14 +432,14 @@ export default {
       }
     }
   }
-  .comment-list{
+  .comment-list {
     margin-top: 40px;
   }
-  .comment-none{
+  .comment-none {
     height: 100px;
     text-align: center;
     line-height: 100px;
-    color:#999;
+    color: #999;
   }
 }
 </style>
