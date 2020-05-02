@@ -181,7 +181,6 @@ export default {
   },
   mounted() {
     const IsshowMap = !this.$store.state.hotel.IsshowMap;
-    console.log(IsshowMap);
 
     if (IsshowMap) {
       // 首次进入获取当前城市列表

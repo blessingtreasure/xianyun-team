@@ -24,7 +24,13 @@
         <div class="block">
           <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
-              <em ref="selected">不限</em>
+              <em ref="selected" v-if="index==='levels'">{{levellenght>0?'已选'+levellenght+'项':'不限'}}</em>
+              <em ref="selected" v-if="index==='types'">{{typelength>0?'已选'+typelength+'项':'不限'}}</em>
+              <em ref="selected" v-if="index==='assets'">{{asseslength>0?'已选'+asseslength+'项':'不限'}}</em>
+              <em
+                ref="selected"
+                v-if="index==='brands'"
+              >{{brandslength>0?'已选'+brandslength+'项':'不限'}}</em>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -59,7 +65,10 @@ export default {
       filterStr: "", //已选的过滤条件
       filterPrice: "", //价格筛选
       cityId: "", // 城市id
-      levelItem: []
+      levellenght: 0,
+      typelength: 0,
+      asseslength: 0,
+      brandslength: 0
     };
   },
   methods: {
@@ -86,12 +95,15 @@ export default {
             if (item == `hotellevel_in=${checkedItem.level}&`) {
               flag = false;
               this.checkboxSlected.splice(index, 1);
+              this.levellenght--;
             }
           });
           if (flag) {
+            this.levellenght++;
             this.checkboxSlected.push(`hotellevel_in=${checkedItem.level}&`);
           }
         } else {
+          this.levellenght++;
           this.checkboxSlected.push(`hotellevel_in=${checkedItem.level}&`);
         }
       }
@@ -101,14 +113,17 @@ export default {
           this.checkboxSlected.forEach((item, index) => {
             if (item == `hoteltype_in=${checkedItem.id}&`) {
               flag = false;
+              this.typelength--;
               this.checkboxSlected.splice(index, 1);
             }
           });
           if (flag) {
             this.checkboxSlected.push(`hoteltype_in=${checkedItem.id}&`);
+            this.typelength++;
           }
         } else {
           this.checkboxSlected.push(`hoteltype_in=${checkedItem.id}&`);
+          this.typelength++;
         }
       }
       // // 酒店设施
@@ -118,13 +133,16 @@ export default {
             if (item == `hotelasset_in=${checkedItem.id}&`) {
               flag = false;
               this.checkboxSlected.splice(index, 1);
+              this.asseslength--;
             }
           });
           if (flag) {
             this.checkboxSlected.push(`hotelasset_in=${checkedItem.id}&`);
+            this.asseslength++;
           }
         } else {
           this.checkboxSlected.push(`hotelasset_in=${checkedItem.id}&`);
+          this.asseslength++;
         }
       }
       //  酒店品牌
@@ -134,13 +152,16 @@ export default {
             if (item == `hotelbrand_in=${checkedItem.id}&`) {
               flag = false;
               this.checkboxSlected.splice(index, 1);
+              this.brandslength--;
             }
           });
           if (flag) {
             this.checkboxSlected.push(`hotelbrand_in=${checkedItem.id}&`);
+            this.brandslength++;
           }
         } else {
           this.checkboxSlected.push(`hotelbrand_in=${checkedItem.id}&`);
+          this.brandslength++;
         }
       }
       this.filterStr = this.checkboxSlected.join(",");
