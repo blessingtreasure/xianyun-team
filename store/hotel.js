@@ -7,7 +7,9 @@ function state() {
     // 酒店的筛选条件
     filter: {},
     // 酒店定位经纬度
-    location: []
+    location: [],
+    // 是否再次刷新地图
+    IsshowMap: false
   }
 }
 // 同步修改state中的数据
@@ -26,6 +28,10 @@ const mutations = {
   // 添加定位坐标
   setLocation(state, data) {
     state.location = data;
+  },
+  // 修改是否显示地图
+  setIsshowMap(state, data) {
+    state.IsshowMap = data;
   }
 
 }

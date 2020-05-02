@@ -10,7 +10,9 @@
     <!-- 酒店条件筛选 -->
     <filterBar />
     <!-- 酒店列表 -->
-    <hotelList />
+    <keep-alive>
+      <hotelList />
+    </keep-alive>
   </div>
 </template>
 

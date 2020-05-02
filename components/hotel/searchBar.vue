@@ -180,20 +180,26 @@ export default {
     getlocation() {}
   },
   mounted() {
-    // 首次进入获取当前城市列表
-    this.$axios({
-      url: "/cities",
-      params: {
-        name: this.locationCity
-      }
-    }).then(res => {
-      const { scenics } = res.data.data[0];
-      this.scenics = scenics;
-      this.cityId = res.data.data[0].id;
-      // 获取酒店列表
-      this.searchInfo();
-    });
+    const IsshowMap = !this.$store.state.hotel.IsshowMap;
+    console.log(IsshowMap);
 
+    if (IsshowMap) {
+      // 首次进入获取当前城市列表
+      this.$axios({
+        url: "/cities",
+        params: {
+          name: this.locationCity
+        }
+      }).then(res => {
+        const { scenics } = res.data.data[0];
+        this.scenics = scenics;
+        this.cityId = res.data.data[0].id;
+        // 获取酒店列表
+        this.searchInfo();
+      });
+
+      // this.$store.commit("hotel/setIsshowMap", true);
+    }
     setTimeout(() => {
       this.getMap();
     }, 600);
@@ -398,8 +404,6 @@ export default {
           city: this.cityId
         }
       }).then(res => {
-        console.log(this.cityId);
-
         this.hotelList = res.data;
         this.$store.commit("hotel/setHotelList", this.hotelList);
         this.$store.commit("hotel/setFilter", {
