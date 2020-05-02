@@ -171,15 +171,10 @@ export default {
     // 酒店列表网络请求
     handleFilter() {
       let filter = this.$store.state.hotel.filter;
-      for (let key in filter) {
-        if (filter[key]) {
-          this.filterStr = this.filterStr.concat(`${key}=${filter[key]}&`);
-        }
-      }
       this.filterStr = this.filterStr.substr(0, this.filterStr.length - 1);
 
       this.$axios({
-        url: `/hotels?${this.filterPrice}${this.filterStr}`
+        url: `/hotels?city=${filter.city}&${this.filterPrice}${this.filterStr}`
       }).then(res => {
         this.$store.commit("hotel/setHotelList", res.data);
       });
