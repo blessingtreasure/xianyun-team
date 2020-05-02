@@ -5,14 +5,15 @@
       <el-col :span="8" class="filter-item">
         <div class="title">
           <span>价格</span>
-          <span>0-2000</span>
+          <span>0-4000</span>
         </div>
         <!-- 价格控件 -->
         <div class="block">
-          <el-slider v-model="value2" :max="2000" size="mini"></el-slider>
+          <el-slider v-model="price" :max="4000" size="mini" @change="handlePrice(price)"></el-slider>
         </div>
       </el-col>
-      <!-- 住宿登记 -->
+      <!-- 过滤筛选 -->
+      <!-- 过滤筛选 -->
       <el-col :span="4" class="filter-item" v-for="(item,index) in options" :key="index">
         <div class="title">
           <span v-if="index==='levels'">酒店等级</span>
@@ -26,10 +27,14 @@
               <em ref="selected">不限</em>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
-            <el-dropdown-menu slot="dropdown" :command="index">
-              <el-dropdown-item v-for="(item,index) in item" :key="index">
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(item) in item" :key="item.length" :command="index">
                 <el-checkbox-group v-model="checkboxGroup">
-                  <el-checkbox :label="item.name" @change="dandlecheck">{{item.name}}</el-checkbox>
+                  <el-checkbox
+                    :label="item.name"
+                    @change="dandlecheck(index,item)"
+                    true-label
+                  >{{item.name}}</el-checkbox>
                 </el-checkbox-group>
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -47,16 +52,14 @@ export default {
   },
   data() {
     return {
-      // 滑块的默认值
-      value2: 1000,
-      // 酒店的过滤选项
-      options: [],
-      // 已选选项（全部）
+      price: 4000, // 滑块的默认值
+      options: [], // 酒店的过滤选项
       checkboxGroup: [],
-      levels: 0,
-      types: 0,
-      assets: 0,
-      brands: 0
+      checkboxSlected: [], // 已选选项数组（全部）
+      filterStr: "", //已选的过滤条件
+      filterPrice: "", //价格筛选
+      cityId: "", // 城市id
+      levelItem: []
     };
   },
   methods: {
@@ -67,14 +70,100 @@ export default {
         this.options = data;
       });
     },
-    // 处理多选
-    dandlecheck() {
-      console.log(this.checkboxGroup);
-      // console.log(this.$refs.seleted);
+    // 处理价格条件
+    handlePrice(price) {
+      this.filterPrice = `price_lt=${price}&`;
+      this.handleFilter();
     },
-    handleCommand(command) {
-      // this.$message("click on item " + command);
-    }
+    // 处理多条件筛选
+    dandlecheck(index, checkedItem) {
+      // 定义falg变量，默认为true
+      let flag = true;
+      // 酒店等级
+      if (index === "levels") {
+        if (this.checkboxSlected.length > 0) {
+          this.checkboxSlected.forEach((item, index) => {
+            if (item == `hotellevel_in=${checkedItem.level}&`) {
+              flag = false;
+              this.checkboxSlected.splice(index, 1);
+            }
+          });
+          if (flag) {
+            this.checkboxSlected.push(`hotellevel_in=${checkedItem.level}&`);
+          }
+        } else {
+          this.checkboxSlected.push(`hotellevel_in=${checkedItem.level}&`);
+        }
+      }
+      // 酒店类型
+      if (index === "types") {
+        if (this.checkboxSlected.length > 0) {
+          this.checkboxSlected.forEach((item, index) => {
+            if (item == `hoteltype_in=${checkedItem.id}&`) {
+              flag = false;
+              this.checkboxSlected.splice(index, 1);
+            }
+          });
+          if (flag) {
+            this.checkboxSlected.push(`hoteltype_in=${checkedItem.id}&`);
+          }
+        } else {
+          this.checkboxSlected.push(`hoteltype_in=${checkedItem.id}&`);
+        }
+      }
+      // // 酒店设施
+      if (index === "assets") {
+        if (this.checkboxSlected.length > 0) {
+          this.checkboxSlected.forEach((item, index) => {
+            if (item == `hotelasset_in=${checkedItem.id}&`) {
+              flag = false;
+              this.checkboxSlected.splice(index, 1);
+            }
+          });
+          if (flag) {
+            this.checkboxSlected.push(`hotelasset_in=${checkedItem.id}&`);
+          }
+        } else {
+          this.checkboxSlected.push(`hotelasset_in=${checkedItem.id}&`);
+        }
+      }
+      //  酒店品牌
+      if (index === "brands") {
+        if (this.checkboxSlected.length > 0) {
+          this.checkboxSlected.forEach((item, index) => {
+            if (item == `hotelbrand_in=${checkedItem.id}&`) {
+              flag = false;
+              this.checkboxSlected.splice(index, 1);
+            }
+          });
+          if (flag) {
+            this.checkboxSlected.push(`hotelbrand_in=${checkedItem.id}&`);
+          }
+        } else {
+          this.checkboxSlected.push(`hotelbrand_in=${checkedItem.id}&`);
+        }
+      }
+      this.filterStr = this.checkboxSlected.join(",");
+      this.filterStr = this.filterStr.replace(/,/g, "");
+      this.handleFilter();
+    },
+    // 酒店列表网络请求
+    handleFilter() {
+      let filter = this.$store.state.hotel.filter;
+      for (let key in filter) {
+        if (filter[key]) {
+          this.filterStr = this.filterStr.concat(`${key}=${filter[key]}&`);
+        }
+      }
+      this.filterStr = this.filterStr.substr(0, this.filterStr.length - 1);
+
+      this.$axios({
+        url: `/hotels?${this.filterPrice}${this.filterStr}`
+      }).then(res => {
+        this.$store.commit("hotel/setHotelList", res.data);
+      });
+    },
+    handleCommand(command) {}
   }
 };
 </script>
