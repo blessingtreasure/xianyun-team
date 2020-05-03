@@ -171,8 +171,11 @@ export default {
     // 酒店列表网络请求
     handleFilter() {
       let filter = this.$store.state.hotel.filter;
-      this.filterStr = this.filterStr.substr(0, this.filterStr.length - 1);
-
+      for (let key in filter) {
+        if (filter[key] && filter[key] === "city") {
+          this.filterStr = this.filterStr.concat(`${key}=${filter[key]}&`);
+        }
+      }
       this.$axios({
         url: `/hotels?city=${filter.city}&${this.filterPrice}${this.filterStr}`
       }).then(res => {
