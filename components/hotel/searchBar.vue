@@ -180,9 +180,8 @@ export default {
     getlocation() {}
   },
   mounted() {
-    const IsshowMap = !this.$store.state.hotel.IsshowMap;
-
-    if (IsshowMap) {
+    this.IsshowMap = !this.$store.state.hotel.IsshowMap;
+    if (this.IsshowMap) {
       // 首次进入获取当前城市列表
       this.$axios({
         url: "/cities",
@@ -197,10 +196,10 @@ export default {
         this.searchInfo();
       });
 
-      // this.$store.commit("hotel/setIsshowMap", true);
+      this.$store.commit("hotel/setIsshowMap", true);
     }
-    setTimeout(() => {
-      this.getMap();
+    setTimeout(async () => {
+      await this.getMap();
     }, 600);
   },
   data() {
@@ -249,6 +248,8 @@ export default {
       dialogVisible: false,
       //   当前ip地址的城市
       ipcity: "",
+      // 地图显示
+      IsshowMap: true,
       //   地图中心
       center: [113.0991626, 21.9335713],
       //   时间选择器
