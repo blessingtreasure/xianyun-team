@@ -8,7 +8,7 @@ function state() {
     filter: {},
     // 酒店定位经纬度
     location: [],
-    // 是否再次刷新地图
+    // 控制地图显示（防止重复显示弹窗）
     IsshowMap: false
   }
 }

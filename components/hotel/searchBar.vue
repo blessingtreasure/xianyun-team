@@ -160,7 +160,7 @@
       </el-col>
     </el-row>
     <!-- 弹窗窗口 -->
-    <el-dialog title="提示" :visible.sync="$store.state.hotel.IsshowMap" width="35%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="35%">
       <span>
         <i class="el-icon-location" style="color:#6ac144;font-size:30px"></i>
         <em>当前定位城市：{{$store.state.hotel.locationCity.city}}</em>
@@ -184,8 +184,9 @@ export default {
   },
   mounted() {
     // 首次进入获取当前城市列表
-    const IsshowMap = !this.$store.state.hotel.IsshowMap;
-    if (IsshowMap) {
+    this.dialogVisible = !this.$store.state.hotel.IsshowMap;
+
+    if (this.dialogVisible) {
       // 首次进入获取当前城市列表
       this.$axios({
         url: "/cities",
@@ -199,12 +200,10 @@ export default {
         // 获取酒店列表
         this.searchInfo();
       });
-
-      this.$store.commit("hotel/setIsshowMap", true);
     }
     setTimeout(async () => {
       await this.getMap();
-    }, 600);
+    }, 1000);
   },
   data() {
     return {
@@ -270,7 +269,7 @@ export default {
     // 创建地图实例
     getMap() {
       // 获取用户定位
-      const city = this.showCityInfo();
+      this.showCityInfo();
       // -------------------------
       var map = new AMap.Map("container", {
         //center: this.CompanyCommunityList.length ? [this.CompanyCommunityList[0].longitude, this.CompanyCommunityList[0].latitude] : this.mapCenter,
@@ -387,7 +386,8 @@ export default {
     handleClose() {},
     // 控制弹窗口的显隐
     isVisible() {
-      this.$store.commit("hotel/setIsshowMap", false);
+      this.dialogVisible = false;
+      this.$store.commit("hotel/setIsshowMap", true);
     },
     // 获取选择的时间
     selectTime() {
