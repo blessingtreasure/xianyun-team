@@ -182,6 +182,18 @@ export default {
       this.$axios({
         url: `/hotels?${filterArr}${this.filterPrice}${this.filterStr}`
       }).then(res => {
+        const data = res.data.data || {};
+        let location = [];
+        if (data) {
+          data.forEach(item => {
+            location.push(item.location);
+          });
+        }
+        if (location.length > 0) {
+          // this.center = [location[0].longitude, location[0].latitude];
+          this.location = location;
+          this.$store.commit("hotel/setLocation", location);
+        }
         this.$store.commit("hotel/setHotelList", res.data);
       });
     },
