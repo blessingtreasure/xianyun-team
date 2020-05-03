@@ -173,13 +173,12 @@ export default {
       let filter = this.$store.state.hotel.filter;
       let filterArr = [];
       for (let key in filter) {
-        if (filter[key]) {
+        if (filter[key] && key !== "price_lt") {
           filterArr = filterArr.concat(`${key}=${filter[key]}&`);
         }
       }
       filterArr = filterArr.join(",");
       filterArr = filterArr.replace(/,/g, "");
-
       this.$axios({
         url: `/hotels?${filterArr}${this.filterPrice}${this.filterStr}`
       }).then(res => {
