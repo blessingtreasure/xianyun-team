@@ -177,15 +177,20 @@
 import moment from "moment";
 export default {
   computed: {
-    //   将vuex中的数据保存到data中
+    //   监听location坐标的变化，更新地图
     getlocation() {
-      this.$store.state.hotel.location || {};
+      if (this.location.length > 0) {
+        this.location = this.$store.state.hotel.location;
+        setTimeout(async () => {
+          await this.getMap();
+        });
+        return this.location;
+      }
     }
   },
   mounted() {
     // 首次进入获取当前城市列表
     this.dialogVisible = !this.$store.state.hotel.IsshowMap;
-
     if (this.dialogVisible) {
       // 首次进入获取当前城市列表
       this.$axios({
@@ -423,7 +428,7 @@ export default {
         params: {
           enterTime: this.enterTime,
           leftTime: this.leftTime,
-          _limit: 5,
+          // _limit: 5,
           _start: 1,
           price_lt: 4000,
           city: this.cityId
@@ -439,6 +444,7 @@ export default {
         if (location.length > 0) {
           // this.center = [location[0].longitude, location[0].latitude];
           this.location = location;
+          this.$store.commit("hotel/setLocation", location);
           this.getMap();
         }
 

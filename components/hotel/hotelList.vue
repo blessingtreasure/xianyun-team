@@ -115,13 +115,24 @@ export default {
         params: {
           enterTime: this.filter.enterTime,
           leftTime: this.filter.leftTime,
-          _limit: 5,
+          // _limit: 5,
           _start: val,
           city: this.filter.city
         }
       }).then(res => {
-        // console.log(res);
+        const data = res.data.data || {};
         this.hotelList = res.data;
+        let location = [];
+        if (data) {
+          data.forEach(item => {
+            location.push(item.location);
+          });
+        }
+        if (location.length > 0) {
+          // this.center = [location[0].longitude, location[0].latitude];
+          this.location = location;
+          this.$store.commit("hotel/setLocation", location);
+        }
         this.$store.commit("hotel/setHotelList", this.hotelList);
       });
     },
