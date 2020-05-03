@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-input placeholder="请输入想去的地方，比如：广州" v-model="serchCity" class="search">
+      <el-input placeholder="请输入想去的地方，比如：广州" class="search">
         <i slot="suffix" class="el-input__icon el-icon-search"></i>
       </el-input>
       <div class="recommend">
@@ -20,61 +20,86 @@
         <!-- 推荐列表 -->
         <div class="listBox">
           <!-- 三张图片的 -->
-          <el-row class="list-item">
-            <h4>塞班贵？一定是你的打开方式不对！6000块玩转塞班</h4>
-            <p>大家对塞班岛总存在着这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。图：塞班岛。 by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或最带你6000块花式玩转塞班。图：塞班岛。 by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或带你6000块花式玩转塞班。图：塞班岛。 by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或</p>
-            <el-row class="img-list" type="flex" justify="space-between">
-              <img
-                src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-                alt
-              />
-              <img
-                src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-                alt
-              />
-              <img
-                src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-                alt
-              />
-            </el-row>
+          <el-row
+            class="list-item"
+            v-for="(item,index) in postList"
+            :key="index"
+            v-show="item.images.length>=3||item.images.length===0"
+          >
+            <nuxt-link
+              :to="{
+                    path: `/post/dateil`, 
+                    query: {id: item.id} 
+                  }"
+            >
+              <h4>{{ item.title }}</h4>
+              <p>{{ item.summary }}</p>
+
+              <el-row type="flex" justify="space-between" class="img-list">
+                <div
+                  :style="`height:(item.imgages.length?0:150px)`"
+                  v-for="(item1,index1) in item.images"
+                  :key="index1"
+                >
+                  <img :src="item1" alt />
+                </div>
+              </el-row>
+            </nuxt-link>
             <el-row class="post-info" type="flex" justify="space-between">
               <div class="info">
                 <i class="el-icon-location-outline"></i>
-                <span>北京市</span>
+                <span>{{ item.cityName }}</span>
                 <span>by</span>
-                <img src="http://127.0.0.1:1337/assets/images/avatar.jpg" />
-                <span>地球发动机</span>
+                <!-- <img :src="'$axios.defaults.baseURL' + item.account.defaultAvatar" /> -->
+                <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
+                <span>{{ item.account.nickname }}</span>
                 <i class="el-icon-view"></i>
-                <span>15194</span>
+                <span>{{ item.watch||0}}</span>
               </div>
-              <div class="star">80赞</div>
+              <div class="star">{{ item.like||0}}赞</div>
             </el-row>
           </el-row>
           <!-- 一张张图片的 -->
 
-          <el-row class="list-item" type="flex" justify="space-between">
+          <el-row
+            class="list-item"
+            type="flex"
+            v-for="(item,index1) in postList"
+            :key="index1"
+            v-show="item.images.length>0 && item.images.length<3"
+          >
             <div class="imgBox">
-              <img
-                src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-              />
+              <img :src="item.images[0]" />
             </div>
-            <div>
-              <h4>塞班贵？一定是你的打开方式不对！6000块玩转塞班</h4>
-              <p>大家对塞班岛总存在着这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班</p>
+            <el-col type="flex">
+              <h4>{{ item.title }}</h4>
+              <p>{{ item.summary }}</p>
               <el-row class="post-info" type="flex" justify="space-between">
                 <div class="info">
                   <i class="el-icon-location-outline"></i>
-                  <span>北京市</span>
+                  <span>{{ item.cityName }}</span>
                   <span>by</span>
-                  <img src="http://127.0.0.1:1337/assets/images/avatar.jpg" />
-                  <span>地球发动机</span>
+                  <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
+                  <span>{{ item.account.nickname }}</span>
                   <i class="el-icon-view"></i>
-                  <span>15194</span>
+                  <span>{{ item.watch||0 }}</span>
                 </div>
-                <div class="star">80赞</div>
+                <div class="star">{{ item.like||0 }}赞</div>
               </el-row>
-            </div>
+            </el-col>
           </el-row>
+
+          <!-- 分页 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageIndex"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            background
+          ></el-pagination>
         </div>
       </div>
     </div>
@@ -85,8 +110,46 @@
 export default {
   data() {
     return {
-      searchCity: ""
+      postList: [],
+      postData: [],
+      total: 0,
+      pageSize: 5,
+      pageIndex: 1
     };
+  },
+  //文章列表
+  mounted() {
+    this.$axios({
+      url: "/posts",
+      params: {}
+    }).then(res => {
+      // console.log(res);
+      const { data, total } = res.data;
+      this.postData = data;
+      this.postList = this.postData.slice(0, this.pageSize);
+      // console.log(this.postList);
+      this.total = total;
+    });
+  },
+
+  methods: {
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.postList = this.postData.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.pageIndex = 1;
+      // console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.pageIndex = val;
+      this.postList = this.postData.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      // console.log(`当前页: ${val}`);
+    }
   }
 };
 </script>
@@ -164,10 +227,19 @@ export default {
       -webkit-box-orient: vertical;
     }
     .img-list {
-      img {
+      width: 100%;
+      overflow: hidden;
+      div {
+        float: left;
         width: 240px;
-        height: 150px;
+        margin-right: 10px;
+        // height: 150px;
+        img {
+          width: 240px;
+          height: 150px;
+        }
       }
+
       margin-bottom: 15px;
     }
     .imgBox {

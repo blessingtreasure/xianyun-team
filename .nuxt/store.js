@@ -17,20 +17,20 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
-  resolveStoreModules(require('../store/air.js'), 'air.js')
-  resolveStoreModules(require('../store/hotel.js'), 'hotel.js')
-  resolveStoreModules(require('../store/post.js'), 'post.js')
-  resolveStoreModules(require('../store/user.js'), 'user.js')
+  resolveStoreModules(require('..\\store\\air.js'), 'air.js')
+  resolveStoreModules(require('..\\store\\hotel.js'), 'hotel.js')
+  resolveStoreModules(require('..\\store\\post.js'), 'post.js')
+  resolveStoreModules(require('..\\store\\user.js'), 'user.js')
 
   // If the environment supports hot reloading...
 
   if (process.client && module.hot) {
     // Whenever any Vuex module is updated...
     module.hot.accept([
-      '../store/air.js',
-      '../store/hotel.js',
-      '../store/post.js',
-      '../store/user.js',
+      '..\\store\\air.js',
+      '..\\store\\hotel.js',
+      '..\\store\\post.js',
+      '..\\store\\user.js',
     ], () => {
       // Update `root.modules` with the latest definitions.
       updateModules()
