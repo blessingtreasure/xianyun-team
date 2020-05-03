@@ -49,14 +49,12 @@
           <div class="item-upload">
             <div>
               <el-upload
-                action="123"
-                :http-request="uploadImgList"
-                :headers="headers"
+                action="http://157.122.54.189:9095/upload"
+              
+                name="files"
                 list-type="picture-card"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
-                :on-success="handleChange"
-                
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -69,10 +67,10 @@
             </div>
           </div>
           <!-- 评论内容部分 -->
-          <div class="user-content" v-if="dataList !==null">
+          <div class="user-content" v-if="dataList ">
             <div class="user-item" v-for="(item,index) in dataList.data" :key="index">
               <div class="item-userInfo">
-                <img :src="$axios.defaults.baseURL +item.account.defaultAvatar" alt /> 
+                <img :src="$axios.defaults.baseURL +item.account.defaultAvatar" alt />
                 <span>{{item.account.nickname}}</span>
                 <span>{{moment(item.account.updated).format("YYYY-MM-DD hh:mm")}}</span>
               </div>
@@ -82,12 +80,9 @@
               <div class="item-comment" v-if="item.content !==''">{{item.content}}</div>
               <!-- 评论的图片 -->
               <div class="item-expression" v-if="item.pics.length>0">
-                <img
-                  v-for="(item,index) in  item.pics"
-                  :key="index"
-                  :src="$axios.defaults.baseUR+item.name"
-                  alt
-                />
+                <div v-for="(value,index) in item.pics" :key="index">
+                  <img :src="$axios.defaults.baseURL+value.name" alt />
+                </div>
               </div>
               <div class="item-reply">
                 <div style="opacity: 0;">占位</div>
@@ -95,7 +90,7 @@
               </div>
             </div>
           </div>
-          <!-- 分页部分 -->
+          <!-- 评论分页部分 -->
           <div>
             <el-pagination
               @size-change="handleSizeChange"
@@ -184,10 +179,7 @@ export default {
       this.dialogVisible = true; //是否预览
     },
     //图片文件发生改变时触发的函数
-    handleChange(response, file, fileList) {
-      const formdata = new FormData();
-      console.log(response);
-    },
+
     //每页的评论条数发生改变的时候触发的函数
     handleSizeChange(val) {
       this.pageSize = val;
@@ -206,20 +198,8 @@ export default {
       this.getList();
     },
     // 点击回复按钮执行的事件
-    handleReply() {
-     
-    },
-    uploadImgList(item) {
-      // console.log(file);
-      let fr = new FormData();
-      fr.append("files", item.file);
-      this.$axios({
-        url: "/upload",
-        params: { files: fr }
-      }).then(res => {
-        console.log(111);
-      });
-    },
+    handleReply() {},
+
     //评论请求的封装
     getList() {
       this.$axios({
