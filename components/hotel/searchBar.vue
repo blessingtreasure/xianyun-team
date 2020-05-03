@@ -16,6 +16,7 @@
         ></el-autocomplete>
         <!-- 日期选择 -->
         <el-date-picker
+          :clearable="false"
           v-model="datatime"
           :picker-options="pickerOptions"
           type="daterange"
@@ -159,13 +160,13 @@
       </el-col>
     </el-row>
     <!-- 弹窗窗口 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="35%">
+    <el-dialog title="提示" :visible.sync="$store.state.hotel.IsshowMap" width="35%">
       <span>
         <i class="el-icon-location" style="color:#6ac144;font-size:30px"></i>
         <em>当前定位城市：{{$store.state.hotel.locationCity.city}}</em>
       </span>
       <span slot="footer" class="dialog-foo ter">
-        <el-button type="primary" @click="dialogVisible = false" size="small">确 定</el-button>
+        <el-button type="primary" @click="isVisible" size="small">确 定</el-button>
       </span>
     </el-dialog>
     <div v-show="false">{{getlocation}}</div>
@@ -177,11 +178,14 @@ import moment from "moment";
 export default {
   computed: {
     //   将vuex中的数据保存到data中
-    getlocation() {}
+    getlocation() {
+      this.$store.state.hotel.location || {};
+    }
   },
   mounted() {
-    this.IsshowMap = !this.$store.state.hotel.IsshowMap;
-    if (this.IsshowMap) {
+    // 首次进入获取当前城市列表
+    const IsshowMap = !this.$store.state.hotel.IsshowMap;
+    if (IsshowMap) {
       // 首次进入获取当前城市列表
       this.$axios({
         url: "/cities",
@@ -248,8 +252,6 @@ export default {
       dialogVisible: false,
       //   当前ip地址的城市
       ipcity: "",
-      // 地图显示
-      IsshowMap: true,
       //   地图中心
       center: [113.0991626, 21.9335713],
       //   时间选择器
@@ -265,45 +267,63 @@ export default {
     };
   },
   methods: {
+    // 创建地图实例
     getMap() {
-      // 创建地图实例
-
-      var map = new AMap.Map("container", {
-        //   center: [113.722733, 22.39739], //地图中心点
-        center: this.center,
-        zoom: 8 //地图显示的缩放级别
-      });
+      // 获取用户定位
       const city = this.showCityInfo();
-      //   是否显示弹出窗口
-      this.dialogVisible = true;
-
       // -------------------------
-
-      // ------------------------
-      // 自定义点标记内容
-      var markerContent = document.createElement("div");
-      markerContent.style = "position:relative";
-      // 点标记中的图标
-      var markerImg = document.createElement("img");
-      markerImg.className = "markerlnglat";
-      markerImg.src =
-        "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png";
-      markerImg.style = "width:30px;";
-      // markerImg.position = "relative";
-      markerContent.appendChild(markerImg);
-      // 点标记中的数字
-      var markerNum = document.createElement("span");
-      markerNum.className = "marker-number";
-      markerNum.style =
-        "position:absolute;left:50%;top:50%;transform: translate(-50%, -85%);color:#fff;";
-      markerNum.innerHTML = "9";
-      markerContent.appendChild(markerNum);
-      var marker = new AMap.Marker({
-        content: markerContent,
-        offset: new AMap.Pixel(-13, -30)
+      var map = new AMap.Map("container", {
+        //center: this.CompanyCommunityList.length ? [this.CompanyCommunityList[0].longitude, this.CompanyCommunityList[0].latitude] : this.mapCenter,
+        center:
+          this.location.length > 0
+            ? [this.location[0].longitude, this.location[0].latitude]
+            : this.center,
+        zoom: 10
       });
-      // 将 markers 添加到地图
-      map.add(marker);
+      //声明一个list
+      let data_com = [];
+      for (var i = 0; i < this.location.length; i++) {
+        data_com.push({
+          x: this.location[i].longitude,
+          y: this.location[i].latitude
+        });
+      }
+      var list = {
+        size: this.location.length,
+        data: data_com
+      };
+      for (var j = 0; j < list.size; j++) {
+        // console.log(list.data[j]);
+        var myObj = list.data[j];
+        var myLngLat = new AMap.LngLat(myObj.x, myObj.y);
+        var marker = new AMap.Marker({
+          position: myLngLat,
+          map: map,
+          clickable: true
+        });
+        // ------------------------
+        // 自定义点标记内容
+        var markerContent = document.createElement("div");
+        markerContent.style = "position:relative";
+        // 点标记中的图标
+        var markerImg = document.createElement("img");
+        markerImg.className = "markerlnglat";
+        markerImg.src =
+          "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png";
+        markerImg.style = "width:30px;";
+        // markerImg.position = "relative";
+        markerContent.appendChild(markerImg);
+        // 点标记中的数字
+        var markerNum = document.createElement("span");
+        markerNum.className = "marker-number";
+        markerNum.style =
+          "position:absolute;left:50%;top:50%;transform: translate(-50%, -85%);color:#fff;";
+        markerNum.innerHTML = "1";
+        markerContent.appendChild(markerNum);
+
+        marker.setContent(markerContent); //更新点标记内容
+        marker.setPosition(myLngLat); //更新点标记位置
+      }
     },
     //   获取搜索城市方法封装
     getCity(value) {
@@ -359,14 +379,16 @@ export default {
       }
       // 保存总人数
       this.totalMember = this.adult + "成人" + "  " + this.child + "儿童";
-
       this.showCard = false;
-      //   console.log(this.totalMember);
     },
     handleChange(val) {
       console.log(val);
     },
     handleClose() {},
+    // 控制弹窗口的显隐
+    isVisible() {
+      this.$store.commit("hotel/setIsshowMap", false);
+    },
     // 获取选择的时间
     selectTime() {
       // 起始时间
@@ -389,9 +411,11 @@ export default {
     },
     // 查询酒店列表信息
     searchInfo() {
-      // if (!this.enterTime && !this.leftTime && !this.cityId) {
-      //   return this.$message.error("请填写搜索内容！");
-      // }
+      this.$store.commit("hotel/setFilter", {
+        enterTime: this.enterTime,
+        leftTime: this.leftTime,
+        city: this.cityId
+      });
       // 字段: hotels,enterTime,leftTime
       this.$axios({
         url: "/hotels",
@@ -401,15 +425,31 @@ export default {
           leftTime: this.leftTime,
           _limit: 5,
           _start: 1,
+          price_lt: 4000,
           city: this.cityId
         }
       }).then(res => {
+        const data = res.data.data || {};
+        let location = [];
+        if (data) {
+          data.forEach(item => {
+            location.push(item.location);
+          });
+        }
+        if (location.length > 0) {
+          // this.center = [location[0].longitude, location[0].latitude];
+          this.location = location;
+          this.getMap();
+        }
+
+        this.$store.commit("hotel/setLocation", location);
         this.hotelList = res.data;
         this.$store.commit("hotel/setHotelList", this.hotelList);
         this.$store.commit("hotel/setFilter", {
+          city: this.cityId,
           enterTime: this.enterTime,
           leftTime: this.leftTime,
-          city: this.cityId
+          price_lt: 4000
         });
       });
     },
