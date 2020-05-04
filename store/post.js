@@ -21,7 +21,6 @@ export const mutations =  {
     }
   },
   removeDraft(state, index) {
-    console.log(11111111111111)
     for (var i = 0; i < state.draftList.length; i++) {
       if (index === i) {
         state.draftList.splice(i,1)
