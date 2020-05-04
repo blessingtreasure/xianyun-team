@@ -85,7 +85,7 @@ export default {
   padding: 0 17px;
   display: flex;
   align-items: center;
-  height: 50px;
+ margin-top:10px ;
 }
 .item-expression {
   display: flex;
@@ -103,6 +103,9 @@ export default {
   font-size: 14px;
   padding: 5px 10px;
   a {
+    width: 100%;
+    height: 15px;
+    text-align: right;
     opacity: 0;
   }
   a:hover {
