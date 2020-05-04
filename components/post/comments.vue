@@ -9,15 +9,15 @@
       <div class="item-comment" v-if="data.content !==''">{{data.content}}</div>
       <div class="item-expression" v-if="data.pics.length>0">
         <img
-          v-for="(item,index) in  item.pics"
+          v-for="(item,index) in  data.pics"
           :key="index"
-          :src="$axios.defaults.baseUR+item.name"
+          :src="$axios.defaults.baseURL+item.url"
           alt
         />
       </div>
       <div class="item-reply">
         <div style=" opacity: 0">占位</div>
-        <a href="javascript:;" @click="handleReply">回复</a>
+        <a href="javascript:;" @click="reply(data)">回复</a>
       </div>
     </div>
   </div>
@@ -42,6 +42,11 @@ export default {
       default: () => {
         return {};
       }
+    }
+  },
+  methods: {
+    reply(data) {
+      this.$emit("reply", data);
     }
   }
 };

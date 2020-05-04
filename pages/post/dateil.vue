@@ -44,17 +44,19 @@
             v-model="value"
             maxlength="150"
             show-word-limit
+            @blur="handleBlur"
           ></el-input>
           <!-- 图片上传框和发送按钮 -->
           <div class="item-upload">
             <div>
               <el-upload
+                ref="upload"
                 action="http://157.122.54.189:9095/upload"
-              
                 name="files"
                 list-type="picture-card"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
+                :on-success="handleSuccess"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -63,7 +65,7 @@
               </el-dialog>
             </div>
             <div>
-              <el-button type="primary">发送</el-button>
+              <el-button type="primary" @click="handleSend">发送</el-button>
             </div>
           </div>
           <!-- 评论内容部分 -->
@@ -75,18 +77,18 @@
                 <span>{{moment(item.account.updated).format("YYYY-MM-DD hh:mm")}}</span>
               </div>
               <!-- 回复的评论 二级跟帖 -->
-              <Comments v-if="item.parent " :data="item.parent" />
+              <Comments v-if="item.parent " :data="item.parent" @reply="replys" />
               <!-- 评论 -->
               <div class="item-comment" v-if="item.content !==''">{{item.content}}</div>
               <!-- 评论的图片 -->
               <div class="item-expression" v-if="item.pics.length>0">
                 <div v-for="(value,index) in item.pics" :key="index">
-                  <img :src="$axios.defaults.baseURL+value.name" alt />
+                  <img :src="$axios.defaults.baseURL+value.url" alt />
                 </div>
               </div>
               <div class="item-reply">
                 <div style="opacity: 0;">占位</div>
-                <a href="javascript:;" @click="handleReply">回复</a>
+                <a href="javascript:;" @click="handleReply(item)">回复</a>
               </div>
             </div>
           </div>
@@ -157,8 +159,7 @@ export default {
       },
       placeValue: "说点什么把...",
       fileList: [], //图片的参数
-      headers: {}, //请求头
-      action: ""
+      pid: ""
     };
   },
   components: {
@@ -172,13 +173,16 @@ export default {
     // 图片删除后执行的函数
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.fileList.splice(file, 1);
     },
     // 图片上传后是否展示预览
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url; //图片路径
       this.dialogVisible = true; //是否预览
     },
-    //图片文件发生改变时触发的函数
+    handleSuccess(response, file, fileList) {
+      this.fileList.push(response[0]);
+    },
 
     //每页的评论条数发生改变的时候触发的函数
     handleSizeChange(val) {
@@ -197,15 +201,52 @@ export default {
 
       this.getList();
     },
+    //发送评论
+    handleSend() {
+      
+      this.$axios({
+        url: "/comments",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ` + this.$store.state.user.userInfo.token
+        },
+        data: {
+          content: this.value,
+          pics: this.fileList,
+          post: this.$route.query.id,
+          follow: this.pid
+        }
+      }).then(res => {
+        this.$message.success("发送成功");
+        this.value = "";
+        this.fileList = [];
+        this.$refs.upload.clearFiles();
+        this.getList();
+        this.pid = "";
+      });
+    },
     // 点击回复按钮执行的事件
-    handleReply() {},
+    handleReply(item) {
+      this.pid = item.id;
+      console.log(this.pid);
 
+      this.placeValue = `回复: @` + item.account.nickname;
+    },
+    //input失焦占位符恢复
+    handleBlur() {
+      this.placeValue = "说点什么把....";
+    },
+    replys(data) {
+      this.pid = data.id;
+      this.placeValue = `回复: @` + data.account.nickname;
+    },
     //评论请求的封装
     getList() {
       this.$axios({
         url: "/posts/comments",
         params: {
-          post: 4,
+          post: this.$route.query.id,
           _start: this.page_start,
           _limit: this.pageSize
         }
@@ -221,7 +262,7 @@ export default {
     this.$axios({
       url: "/posts",
       params: {
-        id: 7
+        id: this.$route.query.id
       }
     }).then(res => {
       // 文章详情得数据
@@ -229,11 +270,6 @@ export default {
     });
     // 文章评论
     this.getList();
-    setTimeout(() => {
-      this.headers = {
-        Authorization: `Bearer ` + this.$store.state.user.userInfo.token
-      };
-    }, 10);
   }
 };
 </script>
