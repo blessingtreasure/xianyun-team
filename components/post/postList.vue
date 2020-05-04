@@ -143,10 +143,21 @@ export default {
       postData: [],
       total: 0,
       pageSize: 5,
-      pageIndex: 1
+      pageIndex: 1,
+      queryCity: ""
     };
   },
-
+  watch: {
+    // 监听路由的变化
+    $route() {
+      // 一旦路由发生了重新请求数据
+      if (this.$route.query.city) {
+        this.queryCity = this.$route.query.city;
+        this.city = this.queryCity;
+      }
+      this.handleSearch();
+    }
+  },
   mounted() {
     //文章列表
     this.$axios({
@@ -159,7 +170,12 @@ export default {
       this.postListCache = [...this.postData];
       this.postList = this.postData.slice(0, this.pageSize);
       // console.log(this.postList);
-      this.total = this.postList.length;
+      this.total = this.postData.length;
+      if (this.$route.query.city) {
+        this.queryCity = this.$route.query.city;
+        this.city = this.queryCity;
+        this.handleSearch();
+      }
     });
   },
 
@@ -175,7 +191,10 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageIndex = val;
-      this.postList = this.postListCache.slice(
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
@@ -190,6 +209,7 @@ export default {
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
+      this.total = this.postListCity.length;
     },
     handleCity(item) {
       this.city = item;
@@ -200,6 +220,7 @@ export default {
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
+      this.total = this.postListCity.length;
     }
   }
 };

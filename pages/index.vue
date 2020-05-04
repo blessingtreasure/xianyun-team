@@ -33,7 +33,11 @@
 
         <!-- 输入框 -->
         <el-row type="flex" align="middle" class="search-input">
-          <input :placeholder="options[current].value" />
+          <input
+            :placeholder="options[current].value"
+            @keyup.enter="handleSearchCity"
+            v-model="city"
+          />
           <i class="el-icon-search"></i>
         </el-row>
       </div>
@@ -47,6 +51,7 @@ export default {
     return {
       // 存放轮播图
       banners: [],
+      city: "",
       // 定义搜索tab栏的数据
       options: [
         { label: "攻略", value: "搜索城市" },
@@ -78,6 +83,14 @@ export default {
       }
 
       this.current = index;
+    },
+    handleSearchCity() {
+      if (this.current == 0) {
+        this.$router.push({
+          path: "/post",
+          query: { city: this.city }
+        });
+      }
     }
   }
 };
