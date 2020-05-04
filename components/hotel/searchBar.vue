@@ -212,7 +212,7 @@ export default {
     }
     setTimeout(async () => {
       await this.getMap();
-    }, 700);
+    }, 1000);
   },
   data() {
     return {
@@ -504,6 +504,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/.amap-marker-label {
+  border: 1px solid #ccc;
+}
 .marker-span {
   position: absolute;
   left: 0;
