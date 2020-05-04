@@ -194,7 +194,7 @@ export default {
     // 首次进入获取当前城市列表
     this.dialogVisible = !this.$store.state.hotel.IsshowMap;
     if (this.dialogVisible) {
-      // // 首次进入获取当前城市列表
+      // 首次进入获取当前城市列表
 
       this.$axios({
         url: "/cities",
