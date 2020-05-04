@@ -3,7 +3,8 @@
     <!-- 面包屑导航 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/' }">酒店</el-breadcrumb-item>
-      <el-breadcrumb-item>{{$store.state.hotel.locationCity.city}}酒店预订</el-breadcrumb-item>
+      <el-breadcrumb-item>酒店预订</el-breadcrumb-item>
+      <!-- {{$store.state.hotel.locationCity.city}} -->
     </el-breadcrumb>
     <!-- 地区筛选 -->
     <searchBar />

@@ -216,30 +216,12 @@ export default {
     handleSend() {
       if (this.value.trim() === "") {
         if (this.fileList.length > 0) {
-          this.$axios({
-            url: "/comments",
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ` + this.$store.state.user.userInfo.token
-            },
-            data: {
-              content: this.value,
-              pics: this.fileList,
-              post: this.$route.query.id,
-              follow: this.pid
-            }
-          }).then(res => {
-            this.$message.success("发送成功");
-            this.value = "";
-            this.fileList = [];
-            this.$refs.upload.clearFiles();
-            this.getList();
-            this.pid = "";
-          });
+          this.sendLiset();
         } else {
           this.$message.warning("评论内容不能为空");
         }
+      } else {
+        this.sendLiset();
       }
     },
     // 点击回复按钮执行的事件
@@ -256,6 +238,30 @@ export default {
     replys(data) {
       this.pid = data.id;
       this.placeValue = `回复: @` + data.account.nickname;
+    },
+    //评论发布的封装
+    sendLiset() {
+      this.$axios({
+        url: "/comments",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ` + this.$store.state.user.userInfo.token
+        },
+        data: {
+          content: this.value,
+          pics: this.fileList,
+          post: this.$route.query.id,
+          follow: this.pid
+        }
+      }).then(res => {
+        this.$message.success("发送成功");
+        this.value = "";
+        this.fileList = [];
+        this.$refs.upload.clearFiles();
+        this.getList();
+        this.pid = "";
+      });
     },
     //评论请求的封装
     getList() {
@@ -372,11 +378,13 @@ export default {
 .user-content {
   width: 100%;
   border: 1px solid #888;
-  padding-bottom: 2px;
 }
 .user-item {
   padding: 15px;
   border-bottom: 1px dashed #666;
+  &:last-child {
+    border: 0;
+  }
 }
 .item-userInfo {
   display: flex;
@@ -431,5 +439,8 @@ export default {
   height: 100px;
   line-height: 100px;
   text-align: center;
+}
+.el-pagination {
+  margin: 20px 35px;
 }
 </style>

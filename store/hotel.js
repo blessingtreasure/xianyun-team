@@ -2,6 +2,8 @@ function state() {
   return {
     // 获取当前城市
     locationCity: "",
+    // 城市列表
+    scenics: [],
     // 酒店信息列表
     hotelList: {},
     // 酒店的筛选条件
@@ -32,8 +34,11 @@ const mutations = {
   // 修改是否显示地图
   setIsshowMap(state, data) {
     state.IsshowMap = data;
+  },
+  // 修改城市列表
+  setScenics(state, data) {
+    state.scenics = data;
   }
-
 }
 
 export default {
