@@ -1,8 +1,6 @@
 import Axios from 'axios'
 import defu from 'defu'
 
-const globalName = '$nuxt'
-
 // Axios.prototype cannot be modified
 const axiosExtra = {
   setBaseURL (baseURL) {
@@ -82,7 +80,7 @@ const setupProgress = (axios) => {
     set: () => { }
   }
 
-  const $loading = () => (window[globalName] && window[globalName].$loading && window[globalName].$loading.set) ? window[globalName].$loading : noopLoading
+  const $loading = () => (window.$nuxt && window.$nuxt.$loading && window.$nuxt.$loading.set) ? window.$nuxt.$loading : noopLoading
 
   let currentRequests = 0
 
@@ -160,13 +158,14 @@ export default (ctx, inject) => {
   }
 
   // Proxy SSR request headers headers
-  if (process.server && ctx.req && ctx.req.headers) {
-    const reqHeaders = { ...ctx.req.headers }
-    for (let h of ["accept","host","cf-ray","cf-connecting-ip","content-length","content-md5","content-type"]) {
-      delete reqHeaders[h]
-    }
-    axiosOptions.headers.common = { ...reqHeaders, ...axiosOptions.headers.common }
-  }
+  axiosOptions.headers.common = (ctx.req && ctx.req.headers) ? Object.assign({}, ctx.req.headers) : {}
+  delete axiosOptions.headers.common['accept']
+  delete axiosOptions.headers.common['host']
+  delete axiosOptions.headers.common['cf-ray']
+  delete axiosOptions.headers.common['cf-connecting-ip']
+  delete axiosOptions.headers.common['content-length']
+  delete axiosOptions.headers.common['content-md5']
+  delete axiosOptions.headers.common['content-type']
 
   if (process.server) {
     // Don't accept brotli encoding because Node can't parse it
