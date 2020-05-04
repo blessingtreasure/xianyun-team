@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="temp">
-      <div class="draft">草稿箱 （{{draftList.length}}）</div>
+      <div class="draft">草稿箱 （{{draftList.length>0?draftList.length:0}}）</div>
       <div class="draft-content">
         <div  @click="showDraft(index)" class="draft-item" v-for="(item, index) in draftList" :key="index">
           <h4 class="draft-title">{{item.title}}</h4>
@@ -193,7 +193,8 @@ export default {
     saveDraft() {
       this.$refs.formRef.validate(async valid => {
         if (!valid) return false;
-        this.$store.commit("post/setDraft", this.form);
+        const from = {...this.form}
+        this.$store.commit("post/setDraft", from);
         this.$message.success('已存为草稿')
         this.$refs.formRef.resetFields();
       });

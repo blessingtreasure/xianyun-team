@@ -72,6 +72,7 @@
         <el-col :span="20">
           <el-tag
             type="info"
+            class="tag"
             v-for="(item,index) in hotelDetail.hotelassets"
             :key="index"
           >{{item.name}}</el-tag>
@@ -374,6 +375,9 @@ export default {
     padding: 14px 0;
     border-bottom: 1px solid #eee;
     font-size: 14px;
+  }
+  .tag{
+    margin-right: 10px;
   }
 }
 .comments {
