@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <el-input placeholder="请输入想去的地方，比如：广州" class="search">
-        <i slot="suffix" class="el-input__icon el-icon-search"></i>
+      <el-input placeholder="请输入想去的地方，比如：广州" class="search" v-model="city">
+        <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>
       </el-input>
       <div class="recommend">
         <span>推荐：</span>
@@ -59,13 +59,13 @@
               <div class="star">{{ item.like||0}}赞</div>
             </el-row>
           </el-row>
-          <!-- 一张张图片的 -->
+          <!-- 一张图片的 -->
 
           <el-row
             class="list-item"
             type="flex"
-            v-for="(item,index1) in postList"
-            :key="index1"
+            v-for="(item) in postList"
+            :key="item.imgages"
             v-show="item.images.length>0 && item.images.length<3"
           >
             <div class="imgBox">
@@ -110,6 +110,7 @@
 export default {
   data() {
     return {
+      city: "",
       postList: [],
       postData: [],
       total: 0,
@@ -117,8 +118,9 @@ export default {
       pageIndex: 1
     };
   },
-  //文章列表
+
   mounted() {
+    //文章列表
     this.$axios({
       url: "/posts",
       params: {}
@@ -149,6 +151,16 @@ export default {
         this.pageIndex * this.pageSize
       );
       // console.log(`当前页: ${val}`);
+    },
+    handleSearch() {
+      this.$axios({
+        url: "/postkinds"
+        // params: {
+        //   id: 10
+        // }
+      }).then(res => {
+        console.log(res);
+      });
     }
   }
 };
