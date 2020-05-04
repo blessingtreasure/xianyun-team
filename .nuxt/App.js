@@ -11,9 +11,15 @@ import {
 import NuxtLoading from './components/nuxt-loading.vue'
 import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
-import '..\\node_modules\\element-ui\\lib\\theme-chalk\\index.css'
+import '..\\node_modules\\_element-ui@2.12.0@element-ui\\lib\\theme-chalk\\index.css'
 
 import '..\\assets\\main.css'
+
+import '..\\node_modules\\_quill@1.3.7@quill\\dist\\quill.core.css'
+
+import '..\\node_modules\\_quill@1.3.7@quill\\dist\\quill.snow.css'
+
+import '..\\node_modules\\_quill@1.3.7@quill\\dist\\quill.bubble.css'
 
 import _6f6c098b from '..\\layouts\\default.vue'
 
