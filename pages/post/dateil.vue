@@ -9,24 +9,30 @@
         </div>
         <!-- 标题 -->
         <div class="title-h1" v-if="data.length > 0">
-          <h1>{{data[0].title}}</h1>
+          <h1>{{ data[0].title }}</h1>
         </div>
         <div class="tiem">
           <div></div>
           <div class="time-date">
             攻略:
-            <span>{{moment(data[0].created_at).format("YYYY-MM-DD hh:mm")}}</span>
+            <span>{{
+              moment(data[0].created_at).format("YYYY-MM-DD hh:mm")
+            }}</span>
             阅读:
-            <span>{{data[0].watch}}</span>
+            <span>{{ data[0].watch }}</span>
           </div>
         </div>
         <!-- 攻略内容 -->
-        <div v-if="data.length > 0" v-html="data[0].content" class="content"></div>
+        <div
+          v-if="data.length > 0"
+          v-html="data[0].content"
+          class="content"
+        ></div>
         <!-- 评论和分享图标 -->
         <div class="iconfow">
           <div>
             <span class="el-icon-edit-outline"></span>
-            <p>评论({{dataList.total}})</p>
+            <p>评论({{ dataList.total }})</p>
           </div>
           <div>
             <span class="el-icon-share" @click="handleShare"></span>
@@ -69,21 +75,36 @@
             </div>
           </div>
           <!-- 评论内容部分 -->
-          <div class="user-content" v-if="dataList ">
-            <div class="user-item" v-for="(item,index) in dataList.data" :key="index">
+          <div class="user-content" v-if="dataList">
+            <div
+              class="user-item"
+              v-for="(item, index) in dataList.data"
+              :key="index"
+            >
               <div class="item-userInfo">
-                <img :src="$axios.defaults.baseURL +item.account.defaultAvatar" alt />
-                <span>{{item.account.nickname}}</span>
-                <span>{{moment(item.account.updated).format("YYYY-MM-DD hh:mm")}}</span>
+                <img
+                  :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                  alt
+                />
+                <span>{{ item.account.nickname }}</span>
+                <span>{{
+                  moment(item.account.updated).format("YYYY-MM-DD hh:mm")
+                }}</span>
               </div>
               <!-- 回复的评论 二级跟帖 -->
-              <Comments v-if="item.parent " :data="item.parent" @reply="replys" />
+              <Comments
+                v-if="item.parent"
+                :data="item.parent"
+                @reply="replys"
+              />
               <!-- 评论 -->
-              <div class="item-comment" v-if="item.content !==''">{{item.content}}</div>
+              <div class="item-comment" v-if="item.content !== ''">
+                {{ item.content }}
+              </div>
               <!-- 评论的图片 -->
-              <div class="item-expression" v-if="item.pics.length>0">
-                <div v-for="(value,index) in item.pics" :key="index">
-                  <img :src="$axios.defaults.baseURL+value.url" alt />
+              <div class="item-expression" v-if="item.pics.length > 0">
+                <div v-for="(value, index) in item.pics" :key="index">
+                  <img :src="$axios.defaults.baseURL + value.url" alt />
                 </div>
               </div>
               <div class="item-reply">
@@ -98,7 +119,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="pageIndex"
-              :page-sizes="[2,5, 10, 15, 20]"
+              :page-sizes="[2, 5, 10, 15, 20]"
               :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="total"
@@ -135,8 +156,8 @@ export default {
       data: [
         //文章详情
         {
-          title: ""
-        }
+          title: "",
+        },
       ],
       value: "", //评论输入框数据
       dialogImageUrl: "", //预览图片路径
@@ -150,20 +171,20 @@ export default {
           {
             account: {
               defaultAvatar: "",
-              nickname: ""
+              nickname: "",
             },
             follow: {},
-            pics: []
-          }
-        ]
+            pics: [],
+          },
+        ],
       },
       placeValue: "说点什么把...",
       fileList: [], //图片的参数
-      pid: ""
+      pid: "",
     };
   },
   components: {
-    Comments
+    Comments,
   },
 
   methods: {
@@ -203,21 +224,20 @@ export default {
     },
     //发送评论
     handleSend() {
-      
       this.$axios({
         url: "/comments",
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ` + this.$store.state.user.userInfo.token
+          Authorization: `Bearer ` + this.$store.state.user.userInfo.token,
         },
         data: {
           content: this.value,
           pics: this.fileList,
           post: this.$route.query.id,
-          follow: this.pid
-        }
-      }).then(res => {
+          follow: this.pid,
+        },
+      }).then((res) => {
         this.$message.success("发送成功");
         this.value = "";
         this.fileList = [];
@@ -248,33 +268,33 @@ export default {
         params: {
           post: this.$route.query.id,
           _start: this.page_start,
-          _limit: this.pageSize
-        }
-      }).then(res => {
+          _limit: this.pageSize,
+        },
+      }).then((res) => {
         const { data } = res;
         this.dataList = data;
         this.total = data.total;
       });
-    }
+    },
   },
   mounted() {
     // 文章详情
     this.$axios({
       url: "/posts",
       params: {
-        id: this.$route.query.id
-      }
-    }).then(res => {
+        id: this.$route.query.id,
+      },
+    }).then((res) => {
       // 文章详情得数据
       this.data = res.data.data;
     });
     // 文章评论
     this.getList();
-  }
+  },
 };
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 .w {
   width: 1200px;
   margin: 0 auto;
