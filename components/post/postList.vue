@@ -143,11 +143,20 @@ export default {
       postData: [],
       total: 0,
       pageSize: 5,
-      pageIndex: 1
+      pageIndex: 1,
+      queryCity: ""
     };
   },
-
+  watch: {
+    queryCity() {
+      this.city = this.queryCity;
+      this.handleSearch();
+    }
+  },
   mounted() {
+    if (this.$route.query.city) {
+      this.queryCity = this.$route.query.city;
+    }
     //文章列表
     this.$axios({
       url: "/posts",
@@ -159,7 +168,7 @@ export default {
       this.postListCache = [...this.postData];
       this.postList = this.postData.slice(0, this.pageSize);
       // console.log(this.postList);
-      this.total = this.postList.length;
+      this.total = this.postData.length;
     });
   },
 
@@ -190,6 +199,7 @@ export default {
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
+      this.total = this.postListCity.length;
     },
     handleCity(item) {
       this.city = item;
@@ -200,6 +210,7 @@ export default {
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
+      this.total = this.postListCity.length;
     }
   }
 };

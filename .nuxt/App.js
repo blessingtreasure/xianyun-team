@@ -11,11 +11,10 @@ import {
 import NuxtLoading from './components/nuxt-loading.vue'
 import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
-import '../node_modules/element-ui/lib/theme-chalk/index.css'
+import '..\\node_modules\\element-ui\\lib\\theme-chalk\\index.css'
 
-import '../assets/main.css'
+import '..\\assets\\main.css'
 
-<<<<<<< HEAD
 import '..\\node_modules\\quill\\dist\\quill.core.css'
 
 import '..\\node_modules\\quill\\dist\\quill.snow.css'
@@ -23,9 +22,6 @@ import '..\\node_modules\\quill\\dist\\quill.snow.css'
 import '..\\node_modules\\quill\\dist\\quill.bubble.css'
 
 import _6f6c098b from '..\\layouts\\default.vue'
-=======
-import _6f6c098b from '../layouts/default.vue'
->>>>>>> 35e5e9712268dd7e471ce5adcb224a69de3980e4
 
 const layouts = { "_default": sanitizeComponent(_6f6c098b) }
 
