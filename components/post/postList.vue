@@ -1,14 +1,21 @@
 <template>
   <div>
     <div>
-      <el-input placeholder="请输入想去的地方，比如：广州" class="search" v-model="city">
+      <el-input
+        placeholder="请输入想去的地方，比如：广州"
+        class="search"
+        v-model="city"
+        @keyup.enter.native="handleSearch"
+      >
         <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>
       </el-input>
       <div class="recommend">
         <span>推荐：</span>
-        <button>广州</button>
-        <button>上海</button>
-        <button>北京</button>
+        <button
+          v-for="(item,index) in recommendCity"
+          :key="index"
+          @click="handleCity(item)"
+        >{{ item }}</button>
       </div>
       <div>
         <el-row class="title" type="flex" justify="space-between">
@@ -112,8 +119,10 @@
 export default {
   data() {
     return {
+      recommendCity: ["广州", "上海", "北京"],
       city: "",
       postList: [],
+      postListCache: [],
       postData: [],
       total: 0,
       pageSize: 5,
@@ -130,9 +139,10 @@ export default {
       // console.log(res);
       const { data, total } = res.data;
       this.postData = data;
+      this.postListCache = [...this.postData];
       this.postList = this.postData.slice(0, this.pageSize);
       // console.log(this.postList);
-      this.total = total;
+      this.total = this.postList.length;
     });
   },
 
@@ -148,21 +158,31 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageIndex = val;
-      this.postList = this.postData.slice(
+      this.postList = this.postListCache.slice(
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
       // console.log(`当前页: ${val}`);
     },
+    //点击搜索城市
     handleSearch() {
-      this.$axios({
-        url: "/postkinds"
-        // params: {
-        //   id: 10
-        // }
-      }).then(res => {
-        console.log(res);
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
       });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+    },
+    handleCity(item) {
+      this.city = item;
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
     }
   }
 };
