@@ -378,12 +378,11 @@ export default {
 .user-content {
   width: 100%;
   border: 1px solid #888;
-  
 }
 .user-item {
   padding: 15px;
   border-bottom: 1px dashed #666;
-  &:last-child{
+  &:last-child {
     border: 0;
   }
 }
@@ -441,7 +440,7 @@ export default {
   line-height: 100px;
   text-align: center;
 }
-.el-pagination{
+.el-pagination {
   margin: 20px 35px;
 }
 </style>
