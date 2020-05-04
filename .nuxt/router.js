@@ -3,17 +3,18 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _6a6eea1d = () => interopDefault(import('..\\pages\\air\\index.vue' /* webpackChunkName: "pages_air_index" */))
-const _7d436033 = () => interopDefault(import('..\\pages\\hotel\\index.vue' /* webpackChunkName: "pages_hotel_index" */))
-const _4eb2f452 = () => interopDefault(import('..\\pages\\map.vue' /* webpackChunkName: "pages_map" */))
-const _ebfd19a6 = () => interopDefault(import('..\\pages\\post\\index.vue' /* webpackChunkName: "pages_post_index" */))
-const _7e0cabe4 = () => interopDefault(import('..\\pages\\air\\flights.vue' /* webpackChunkName: "pages_air_flights" */))
-const _f98caace = () => interopDefault(import('..\\pages\\air\\order.vue' /* webpackChunkName: "pages_air_order" */))
-const _44c5e7b3 = () => interopDefault(import('..\\pages\\air\\pay.vue' /* webpackChunkName: "pages_air_pay" */))
-const _79089480 = () => interopDefault(import('..\\pages\\hotel\\detail.vue' /* webpackChunkName: "pages_hotel_detail" */))
-const _5df199f4 = () => interopDefault(import('..\\pages\\post\\dateil.vue' /* webpackChunkName: "pages_post_dateil" */))
-const _fc48ab8e = () => interopDefault(import('..\\pages\\user\\login.vue' /* webpackChunkName: "pages_user_login" */))
-const _2185f18d = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+const _f680c210 = () => interopDefault(import('..\\pages\\air\\index.vue' /* webpackChunkName: "pages_air_index" */))
+const _463a4a4e = () => interopDefault(import('..\\pages\\hotel\\index.vue' /* webpackChunkName: "pages_hotel_index" */))
+const _e36c7d48 = () => interopDefault(import('..\\pages\\map.vue' /* webpackChunkName: "pages_map" */))
+const _8c714c9c = () => interopDefault(import('..\\pages\\post\\index.vue' /* webpackChunkName: "pages_post_index" */))
+const _ec1ed7ae = () => interopDefault(import('..\\pages\\air\\flights.vue' /* webpackChunkName: "pages_air_flights" */))
+const _c4eb4118 = () => interopDefault(import('..\\pages\\air\\order.vue' /* webpackChunkName: "pages_air_order" */))
+const _2de4174e = () => interopDefault(import('..\\pages\\air\\pay.vue' /* webpackChunkName: "pages_air_pay" */))
+const _19620f05 = () => interopDefault(import('..\\pages\\hotel\\detail.vue' /* webpackChunkName: "pages_hotel_detail" */))
+const _cc03c5be = () => interopDefault(import('..\\pages\\post\\dateil.vue' /* webpackChunkName: "pages_post_dateil" */))
+const _10d87dac = () => interopDefault(import('..\\pages\\post\\post-release.vue' /* webpackChunkName: "pages_post_post-release" */))
+const _9cbcde84 = () => interopDefault(import('..\\pages\\user\\login.vue' /* webpackChunkName: "pages_user_login" */))
+const _096f405c = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -33,47 +34,51 @@ export const routerOptions = {
 
   routes: [{
     path: "/air",
-    component: _6a6eea1d,
+    component: _f680c210,
     name: "air"
   }, {
     path: "/hotel",
-    component: _7d436033,
+    component: _463a4a4e,
     name: "hotel"
   }, {
     path: "/map",
-    component: _4eb2f452,
+    component: _e36c7d48,
     name: "map"
   }, {
     path: "/post",
-    component: _ebfd19a6,
+    component: _8c714c9c,
     name: "post"
   }, {
     path: "/air/flights",
-    component: _7e0cabe4,
+    component: _ec1ed7ae,
     name: "air-flights"
   }, {
     path: "/air/order",
-    component: _f98caace,
+    component: _c4eb4118,
     name: "air-order"
   }, {
     path: "/air/pay",
-    component: _44c5e7b3,
+    component: _2de4174e,
     name: "air-pay"
   }, {
     path: "/hotel/detail",
-    component: _79089480,
+    component: _19620f05,
     name: "hotel-detail"
   }, {
     path: "/post/dateil",
-    component: _5df199f4,
+    component: _cc03c5be,
     name: "post-dateil"
   }, {
+    path: "/post/post-release",
+    component: _10d87dac,
+    name: "post-post-release"
+  }, {
     path: "/user/login",
-    component: _fc48ab8e,
+    component: _9cbcde84,
     name: "user-login"
   }, {
     path: "/",
-    component: _2185f18d,
+    component: _096f405c,
     name: "index"
   }],
 
