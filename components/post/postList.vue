@@ -150,7 +150,15 @@ export default {
   watch: {
     queryCity() {
       this.city = this.queryCity;
-      this.handleSearch();
+      alert(444444);
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
     }
   },
   mounted() {
