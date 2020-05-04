@@ -1,12 +1,12 @@
 // 存放仓库该分类（post）下的数据
 export const state = () => {
-    return {
-      draftList: [],
-      // 用于重现的草稿
-      draft:''
-    }
+  return {
+    draftList: [],
+    // 用于重现的草稿
+    draft: ''
+  }
 }
-export const mutations =  {
+export const mutations = {
   setDraft(state, draft) {
     state.draftList.unshift(draft)
     if (state.draftList.length > 5) {
@@ -14,7 +14,7 @@ export const mutations =  {
     }
   },
   getDraftDetail(state, index) {
-    for (var i = 0; i < state.draftList.length; i++){
+    for (var i = 0; i < state.draftList.length; i++) {
       if (index === i) {
         state.draft = state.draftList[i]
       }
@@ -23,7 +23,7 @@ export const mutations =  {
   removeDraft(state, index) {
     for (var i = 0; i < state.draftList.length; i++) {
       if (index === i) {
-        state.draftList.splice(i,1)
+        state.draftList.splice(i, 1)
       }
     }
     console.log(state.draftList)

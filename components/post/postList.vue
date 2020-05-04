@@ -1,14 +1,21 @@
 <template>
   <div>
     <div>
-      <el-input placeholder="请输入想去的地方，比如：广州" class="search" v-model="city">
+      <el-input
+        placeholder="请输入想去的地方，比如：广州"
+        class="search"
+        v-model="city"
+        @keyup.enter.native="handleSearch"
+      >
         <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>
       </el-input>
       <div class="recommend">
         <span>推荐：</span>
-        <button>广州</button>
-        <button>上海</button>
-        <button>北京</button>
+        <button
+          v-for="(item,index) in recommendCity"
+          :key="index"
+          @click="handleCity(item)"
+        >{{ item }}</button>
       </div>
       <div>
         <el-row class="title" type="flex" justify="space-between">
@@ -71,11 +78,28 @@
             v-show="item.images.length>0 && item.images.length<3"
           >
             <div class="imgBox">
-              <img :src="item.images[0]" />
+              <nuxt-link
+                :to="{
+                    path: `/post/dateil`, 
+                    query: {id: item.id} 
+                  }"
+              >
+                <img :src="item.images[0]" />
+              </nuxt-link>
             </div>
             <el-col type="flex">
-              <h4>{{ item.title }}</h4>
-              <p>{{ item.summary }}</p>
+              <nuxt-link
+                :to="{
+                    path: `/post/dateil`, 
+                    query: {id: item.id} 
+                  }"
+              >
+                <div>
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.summary }}</p>
+                </div>
+              </nuxt-link>
+
               <el-row class="post-info" type="flex" justify="space-between">
                 <div class="info">
                   <i class="el-icon-location-outline"></i>
@@ -112,16 +136,35 @@
 export default {
   data() {
     return {
+      recommendCity: ["广州", "上海", "北京"],
       city: "",
       postList: [],
+      postListCache: [],
       postData: [],
       total: 0,
       pageSize: 5,
-      pageIndex: 1
+      pageIndex: 1,
+      queryCity: ""
     };
   },
-
+  watch: {
+    queryCity() {
+      this.city = this.queryCity;
+      alert(444444);
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
+    }
+  },
   mounted() {
+    if (this.$route.query.city) {
+      this.queryCity = this.$route.query.city;
+    }
     //文章列表
     this.$axios({
       url: "/posts",
@@ -130,9 +173,10 @@ export default {
       // console.log(res);
       const { data, total } = res.data;
       this.postData = data;
+      this.postListCache = [...this.postData];
       this.postList = this.postData.slice(0, this.pageSize);
       // console.log(this.postList);
-      this.total = total;
+      this.total = this.postData.length;
     });
   },
 
@@ -148,21 +192,33 @@ export default {
     },
     handleCurrentChange(val) {
       this.pageIndex = val;
-      this.postList = this.postData.slice(
+      this.postList = this.postListCache.slice(
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
       // console.log(`当前页: ${val}`);
     },
+    //点击搜索城市
     handleSearch() {
-      this.$axios({
-        url: "/postkinds"
-        // params: {
-        //   id: 10
-        // }
-      }).then(res => {
-        console.log(res);
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
       });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
+    },
+    handleCity(item) {
+      this.city = item;
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
     }
   }
 };

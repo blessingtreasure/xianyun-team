@@ -125,7 +125,11 @@ export default {
         let location = [];
         if (data) {
           data.forEach(item => {
-            location.push(item.location);
+            location.push({
+              latitude: item.location.latitude,
+              longitude: item.location.longitude,
+              name: item.name
+            });
           });
         }
         if (location.length > 0) {

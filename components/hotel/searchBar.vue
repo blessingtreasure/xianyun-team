@@ -21,8 +21,8 @@
           :picker-options="pickerOptions"
           type="daterange"
           range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          start-placeholder="入店日期"
+          end-placeholder="离店日期"
           @change="selectTime"
         ></el-date-picker>
 
@@ -148,10 +148,6 @@
             type="text/javascript"
             src="https://webapi.amap.com/maps?v=1.4.15&key=ff831391f19ff347e5c4ff2e8490a9ed&plugin=AMap.ToolBar,AMap.CitySearch"
           ></script>
-          <script
-            type="text/javascript"
-            src="https://a.amap.com/jsapi_demos/static/demo-center/data/food_1.4.15.js"
-          ></script>
           <div id="container"></div>
         </div>
         <div class="info">
@@ -214,7 +210,6 @@ export default {
   data() {
     return {
       moment,
-      location: [],
       // 折叠
       activeNames: ["1"],
       options1: [],
@@ -247,6 +242,7 @@ export default {
       locationCity: "",
       city: "",
       cityId: "",
+      location: [], //定位列表
       //   酒店信息列表
       hotelList: [],
       //   搜索城市下拉列表
@@ -315,7 +311,7 @@ export default {
         markerImg.className = "markerlnglat";
         markerImg.src =
           "//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png";
-        markerImg.style = "width:30px;";
+        markerImg.style = "width:26px;";
         // markerImg.position = "relative";
         markerContent.appendChild(markerImg);
         // 点标记中的数字
@@ -323,9 +319,16 @@ export default {
         markerNum.className = "marker-number";
         markerNum.style =
           "position:absolute;left:50%;top:50%;transform: translate(-50%, -85%);color:#fff;";
-        markerNum.innerHTML = "1";
+        markerNum.innerHTML = "";
         markerContent.appendChild(markerNum);
-
+        // 点标记中的文本
+        // 设置label标签
+        // label默认蓝框白底左上角显示，样式className为：amap-marker-label
+        marker.setLabel({
+          offset: new AMap.Pixel(10, 0), //设置文本标注偏移量
+          content: this.location[j].name || "", //设置文本标注内容
+          direction: "bottom" //设置文本标注方位
+        });
         marker.setContent(markerContent); //更新点标记内容
         marker.setPosition(myLngLat); //更新点标记位置
       }
@@ -439,7 +442,11 @@ export default {
         let location = [];
         if (data) {
           data.forEach(item => {
-            location.push(item.location);
+            location.push({
+              latitude: item.location.latitude,
+              longitude: item.location.longitude,
+              name: item.name
+            });
           });
         }
         if (location.length > 0) {
@@ -470,8 +477,8 @@ export default {
         if (status === "complete" && result.info === "OK") {
           if (result && result.city && result.bounds) {
             //   获取城市的经纬度
-            const { Q, R } = result.bounds.northeast;
-            that.center = [R, Q];
+            const { lng, lat } = result.bounds.northeast;
+            that.center = [lng, lat];
             // 把数据保存到vuex
             that.$store.commit("hotel/setCity", result);
             // 把城市保存到data中
@@ -485,6 +492,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.marker-span {
+  position: absolute;
+  left: 0;
+  background-color: #fff;
+  overflow: hidden;
+}
 #container {
   height: 260px;
   // position: absolute;
