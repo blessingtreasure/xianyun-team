@@ -19,6 +19,7 @@
             v-for="(item1,index1) in item.children"
             :key="index1"
             class="mn-option"
+            @click="handleSearchCity(item1.city)"
           >
             <i>{{ index1+1 }}</i>
             <span>{{ item1.city }}</span>
@@ -57,6 +58,12 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    handleSearchCity(item) {
+      this.$router.push({
+        path: "/post",
+        query: { city: item }
+      });
     }
   }
 };
