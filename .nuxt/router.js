@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
+<<<<<<< HEAD
 const _6a6eea1d = () => interopDefault(import('..\\pages\\air\\index.vue' /* webpackChunkName: "pages_air_index" */))
 const _7d436033 = () => interopDefault(import('..\\pages\\hotel\\index.vue' /* webpackChunkName: "pages_hotel_index" */))
 const _4eb2f452 = () => interopDefault(import('..\\pages\\map.vue' /* webpackChunkName: "pages_map" */))
@@ -15,6 +16,19 @@ const _5df199f4 = () => interopDefault(import('..\\pages\\post\\dateil.vue' /* w
 const _38ac174f = () => interopDefault(import('..\\pages\\post\\post-release.vue' /* webpackChunkName: "pages_post_post-release" */))
 const _fc48ab8e = () => interopDefault(import('..\\pages\\user\\login.vue' /* webpackChunkName: "pages_user_login" */))
 const _2185f18d = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages_index" */))
+=======
+const _197c1938 = () => interopDefault(import('../pages/air/index.vue' /* webpackChunkName: "pages/air/index" */))
+const _600b48e4 = () => interopDefault(import('../pages/hotel/index.vue' /* webpackChunkName: "pages/hotel/index" */))
+const _38c4bcb3 = () => interopDefault(import('../pages/map.vue' /* webpackChunkName: "pages/map" */))
+const _1e55ffc8 = () => interopDefault(import('../pages/post/index.vue' /* webpackChunkName: "pages/post/index" */))
+const _612f7d95 = () => interopDefault(import('../pages/air/flights.vue' /* webpackChunkName: "pages/air/flights" */))
+const _0c0cb3e0 = () => interopDefault(import('../pages/air/order.vue' /* webpackChunkName: "pages/air/order" */))
+const _738896ba = () => interopDefault(import('../pages/air/pay.vue' /* webpackChunkName: "pages/air/pay" */))
+const _70b7b476 = () => interopDefault(import('../pages/hotel/detail.vue' /* webpackChunkName: "pages/hotel/detail" */))
+const _44a543f7 = () => interopDefault(import('../pages/post/dateil.vue' /* webpackChunkName: "pages/post/dateil" */))
+const _485d3c9e = () => interopDefault(import('../pages/user/login.vue' /* webpackChunkName: "pages/user/login" */))
+const _1a1c3d2e = () => interopDefault(import('../pages/index.vue' /* webpackChunkName: "pages/index" */))
+>>>>>>> 35e5e9712268dd7e471ce5adcb224a69de3980e4
 
 // TODO: remove in Nuxt 3
 const emptyFn = () => {}
@@ -34,39 +48,39 @@ export const routerOptions = {
 
   routes: [{
     path: "/air",
-    component: _6a6eea1d,
+    component: _197c1938,
     name: "air"
   }, {
     path: "/hotel",
-    component: _7d436033,
+    component: _600b48e4,
     name: "hotel"
   }, {
     path: "/map",
-    component: _4eb2f452,
+    component: _38c4bcb3,
     name: "map"
   }, {
     path: "/post",
-    component: _ebfd19a6,
+    component: _1e55ffc8,
     name: "post"
   }, {
     path: "/air/flights",
-    component: _7e0cabe4,
+    component: _612f7d95,
     name: "air-flights"
   }, {
     path: "/air/order",
-    component: _f98caace,
+    component: _0c0cb3e0,
     name: "air-order"
   }, {
     path: "/air/pay",
-    component: _44c5e7b3,
+    component: _738896ba,
     name: "air-pay"
   }, {
     path: "/hotel/detail",
-    component: _79089480,
+    component: _70b7b476,
     name: "hotel-detail"
   }, {
     path: "/post/dateil",
-    component: _5df199f4,
+    component: _44a543f7,
     name: "post-dateil"
   }, {
     path: "/post/post-release",
@@ -74,11 +88,11 @@ export const routerOptions = {
     name: "post-post-release"
   }, {
     path: "/user/login",
-    component: _fc48ab8e,
+    component: _485d3c9e,
     name: "user-login"
   }, {
     path: "/",
-    component: _2185f18d,
+    component: _1a1c3d2e,
     name: "index"
   }],
 
