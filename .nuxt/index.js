@@ -12,8 +12,7 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_axios_d62a3482 from 'nuxt_plugin_axios_d62a3482' // Source: .\\axios.js (mode: 'all')
-
+import nuxt_plugin_axios_8e5d5ee2 from 'nuxt_plugin_axios_8e5d5ee2' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
 import nuxt_plugin_localStorage_830ec59e from 'nuxt_plugin_localStorage_830ec59e' // Source: ..\\plugins\\localStorage.js (mode: 'client')
 import nuxt_plugin_axios_2228ef02 from 'nuxt_plugin_axios_2228ef02' // Source: ..\\plugins\\axios (mode: 'all')
@@ -25,7 +24,7 @@ Vue.component(ClientOnly.name, ClientOnly)
 // TODO: Remove in Nuxt 3: <NoSsr>
 Vue.component(NoSsr.name, {
   ...NoSsr,
-  render(h, ctx) {
+  render (h, ctx) {
     if (process.client && !NoSsr._warned) {
       NoSsr._warned = true
 
@@ -44,11 +43,11 @@ Vue.component('NChild', NuxtChild)
 // Component: <Nuxt>
 Vue.component(Nuxt.name, Nuxt)
 
-Vue.use(Meta, { "keyName": "head", "attribute": "data-n-head", "ssrAttribute": "data-n-head-ssr", "tagIDKeyName": "hid" })
+Vue.use(Meta, {"keyName":"head","attribute":"data-n-head","ssrAttribute":"data-n-head-ssr","tagIDKeyName":"hid"})
 
-const defaultTransition = { "name": "page", "mode": "out-in", "appear": false, "appearClass": "appear", "appearActiveClass": "appear-active", "appearToClass": "appear-to" }
+const defaultTransition = {"name":"page","mode":"out-in","appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
-async function createApp(ssrContext) {
+async function createApp (ssrContext) {
   const router = await createRouter(ssrContext)
 
   const store = createStore(ssrContext)
@@ -64,14 +63,14 @@ async function createApp(ssrContext) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: { "title": "世界上最大的旅游网站", "meta": [{ "charset": "utf-8" }, { "name": "viewport", "content": "width=device-width, initial-scale=1" }, { "hid": "description", "name": "description", "content": "My beautiful Nuxt.js project" }], "link": [{ "rel": "icon", "type": "image\u002Fx-icon", "href": "\u002Ffavicon.ico" }, { "rel": "stylesheet", "type": "text\u002Fcss", "href": "\u002F\u002Fat.alicdn.com\u002Ft\u002Ffont_1783000_6sy81eb4pv6.css" }], "style": [], "script": [] },
+    head: {"title":"世界上最大的旅游网站","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"My beautiful Nuxt.js project"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","type":"text\u002Fcss","href":"\u002F\u002Fat.alicdn.com\u002Ft\u002Ffont_1783000_6sy81eb4pv6.css"}],"style":[],"script":[]},
 
     store,
     router,
     nuxt: {
       defaultTransition,
       transitions: [defaultTransition],
-      setTransitions(transitions) {
+      setTransitions (transitions) {
         if (!Array.isArray(transitions)) {
           transitions = [transitions]
         }
@@ -91,7 +90,7 @@ async function createApp(ssrContext) {
 
       err: null,
       dateErr: null,
-      error(err) {
+      error (err) {
         err = err || null
         app.context._errored = Boolean(err)
         err = err ? normalizeError(err) : null
@@ -162,7 +161,7 @@ async function createApp(ssrContext) {
     Vue.use(() => {
       if (!Object.prototype.hasOwnProperty.call(Vue, key)) {
         Object.defineProperty(Vue.prototype, key, {
-          get() {
+          get () {
             return this.$root.$options[key]
           }
         })
@@ -179,9 +178,8 @@ async function createApp(ssrContext) {
 
   // Plugin execution
 
-  if (typeof nuxt_plugin_axios_d62a3482 === 'function') {
-    await nuxt_plugin_axios_d62a3482(app.context, inject)
-
+  if (typeof nuxt_plugin_axios_8e5d5ee2 === 'function') {
+    await nuxt_plugin_axios_8e5d5ee2(app.context, inject)
   }
 
   if (typeof nuxt_plugin_elementui_d905880e === 'function') {
