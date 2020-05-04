@@ -78,11 +78,28 @@
             v-show="item.images.length>0 && item.images.length<3"
           >
             <div class="imgBox">
-              <img :src="item.images[0]" />
+              <nuxt-link
+                :to="{
+                    path: `/post/dateil`, 
+                    query: {id: item.id} 
+                  }"
+              >
+                <img :src="item.images[0]" />
+              </nuxt-link>
             </div>
             <el-col type="flex">
-              <h4>{{ item.title }}</h4>
-              <p>{{ item.summary }}</p>
+              <nuxt-link
+                :to="{
+                    path: `/post/dateil`, 
+                    query: {id: item.id} 
+                  }"
+              >
+                <div>
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.summary }}</p>
+                </div>
+              </nuxt-link>
+
               <el-row class="post-info" type="flex" justify="space-between">
                 <div class="info">
                   <i class="el-icon-location-outline"></i>
