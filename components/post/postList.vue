@@ -147,24 +147,14 @@ export default {
       queryCity: ""
     };
   },
-  watch: {
-    queryCity() {
-      this.city = this.queryCity;
-      alert(444444);
-      this.postListCity = this.postListCache.filter(v => {
-        return v.cityName.replace("市", "") === this.city;
-      });
-      this.postList = this.postListCity.slice(
-        (this.pageIndex - 1) * this.pageSize,
-        this.pageIndex * this.pageSize
-      );
-      this.total = this.postListCity.length;
-    }
-  },
+  // watch: {
+  //   queryCity() {
+  //     this.city = this.queryCity;
+  //     // alert(444444);
+  //   }
+  // },
+
   mounted() {
-    if (this.$route.query.city) {
-      this.queryCity = this.$route.query.city;
-    }
     //文章列表
     this.$axios({
       url: "/posts",
@@ -177,6 +167,11 @@ export default {
       this.postList = this.postData.slice(0, this.pageSize);
       // console.log(this.postList);
       this.total = this.postData.length;
+      if (this.$route.query.city) {
+        this.queryCity = this.$route.query.city;
+        this.city = this.queryCity;
+        this.handleSearch();
+      }
     });
   },
 
