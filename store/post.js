@@ -41,4 +41,3 @@ export const getters = {
     return temp
   }
 }
->>>>>>> d58b5a636d4df2a48266fa9b1dd1e9207485f7d8
