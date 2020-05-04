@@ -12,11 +12,19 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
+<<<<<<< HEAD
 import nuxt_plugin_axios_0806d115 from 'nuxt_plugin_axios_0806d115' // Source: ./axios.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ../plugins/element-ui (mode: 'all')
 import nuxt_plugin_localStorage_830ec59e from 'nuxt_plugin_localStorage_830ec59e' // Source: ../plugins/localStorage.js (mode: 'client')
 import nuxt_plugin_axios_2228ef02 from 'nuxt_plugin_axios_2228ef02' // Source: ../plugins/axios (mode: 'all')
 import nuxt_plugin_nuxtquillplugin_745506c8 from 'nuxt_plugin_nuxtquillplugin_745506c8' // Source: ../plugins/nuxt-quill-plugin.js (mode: 'client')
+=======
+import nuxt_plugin_axios_ebfc90ee from 'nuxt_plugin_axios_ebfc90ee' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
+import nuxt_plugin_localStorage_830ec59e from 'nuxt_plugin_localStorage_830ec59e' // Source: ..\\plugins\\localStorage.js (mode: 'client')
+import nuxt_plugin_axios_2228ef02 from 'nuxt_plugin_axios_2228ef02' // Source: ..\\plugins\\axios (mode: 'all')
+import nuxt_plugin_nuxtquillplugin_745506c8 from 'nuxt_plugin_nuxtquillplugin_745506c8' // Source: ..\\plugins\\nuxt-quill-plugin.js (mode: 'client')
+>>>>>>> c13b2950a6c2f7f0a549264aae9bc61809c6bdef
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -178,8 +186,13 @@ async function createApp (ssrContext) {
 
   // Plugin execution
 
+<<<<<<< HEAD
   if (typeof nuxt_plugin_axios_0806d115 === 'function') {
     await nuxt_plugin_axios_0806d115(app.context, inject)
+=======
+  if (typeof nuxt_plugin_axios_ebfc90ee === 'function') {
+    await nuxt_plugin_axios_ebfc90ee(app.context, inject)
+>>>>>>> c13b2950a6c2f7f0a549264aae9bc61809c6bdef
   }
 
   if (typeof nuxt_plugin_elementui_d905880e === 'function') {
