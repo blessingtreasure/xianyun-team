@@ -199,6 +199,8 @@ export default {
           this.$store.commit("hotel/setLocation", location);
         }
         this.$store.commit("hotel/setHotelList", res.data);
+        // 将城市名称保存到vuex
+        this.$store.commit("hotel/setCity", { city: this.city });
       });
     },
     handleCommand(command) {}

@@ -165,7 +165,7 @@
         <el-button type="primary" @click="isVisible" size="small">确 定</el-button>
       </span>
     </el-dialog>
-    <div v-show="false">{{getlocation}}</div>
+    <div v-show="false">{{getlocation}}{{getscenics}}</div>
   </div>
 </template>
 
@@ -183,13 +183,19 @@ export default {
       } else {
         this.location = this.$store.state.hotel.location;
       }
+    },
+    getscenics() {
+      if (this.$store.state.hotel.scenics.length > 0) {
+        this.scenics = this.$store.state.hotel.scenics;
+      }
     }
   },
   mounted() {
     // 首次进入获取当前城市列表
     this.dialogVisible = !this.$store.state.hotel.IsshowMap;
     if (this.dialogVisible) {
-      // 首次进入获取当前城市列表
+      // // 首次进入获取当前城市列表
+
       this.$axios({
         url: "/cities",
         params: {
@@ -199,13 +205,14 @@ export default {
         const { scenics } = res.data.data[0];
         this.scenics = scenics;
         this.cityId = res.data.data[0].id;
-        // 获取酒店列表
-        this.searchInfo();
       });
+
+      // 获取酒店列表
+      this.searchInfo();
     }
     setTimeout(async () => {
       await this.getMap();
-    }, 1000);
+    }, 700);
   },
   data() {
     return {
@@ -373,6 +380,8 @@ export default {
         this.city = this.searchCity[0].value;
         // 获取城市区域列表
         this.getScenics();
+        // 将城市名称保存到vuex
+        this.$store.commit("hotel/setCity", { city: this.city });
       }
     },
     // 控制卡片是否显示
@@ -416,6 +425,8 @@ export default {
         const { scenics } = res.data.data[0];
         this.scenics = scenics;
         this.cityId = res.data.data[0].id;
+        // 保存到vuex
+        this.$store.commit("hotel/setScenics", this.scenics);
       });
     },
     // 查询酒店列表信息
@@ -455,7 +466,8 @@ export default {
           this.$store.commit("hotel/setLocation", location);
           this.getMap();
         }
-
+        // 将城市名称保存到vuex
+        this.$store.commit("hotel/setCity", { city: this.city });
         this.$store.commit("hotel/setLocation", location);
         this.hotelList = res.data;
         this.$store.commit("hotel/setHotelList", this.hotelList);
