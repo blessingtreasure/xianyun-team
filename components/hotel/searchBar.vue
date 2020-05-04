@@ -184,7 +184,8 @@ export default {
         setTimeout(async () => {
           await this.getMap();
         });
-        return this.location;
+      } else {
+        this.location = this.$store.state.hotel.location;
       }
     }
   },
