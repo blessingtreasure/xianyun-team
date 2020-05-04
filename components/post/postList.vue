@@ -14,7 +14,9 @@
         <el-row class="title" type="flex" justify="space-between">
           <h4>推荐攻略</h4>
           <div>
-            <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+            <nuxt-link to="post/post-release">
+              <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+            </nuxt-link>
           </div>
         </el-row>
         <!-- 推荐列表 -->
