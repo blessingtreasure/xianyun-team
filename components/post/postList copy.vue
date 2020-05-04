@@ -167,16 +167,15 @@ export default {
     //文章列表
     getList() {
       this.$axios({
-        url: "/posts",
-        params: {
-          // _limit: this.pageSize,
-          // _start: (this.pageIndex - 1) * this.pageSize
-        }
+        url: "/posts"
+        // params: { city: this.city || "" }
       }).then(res => {
-        console.log(res);
+        // console.log(res);
         const { data, total } = res.data;
         this.postData = data;
+        this.postListCache = [...this.postData];
         this.postList = this.postData.slice(0, this.pageSize);
+        // console.log(this.postList);
         this.total = this.postData.length;
         if (this.$route.query.city) {
           this.queryCity = this.$route.query.city;
@@ -188,16 +187,20 @@ export default {
     getCityList() {
       this.$axios({
         url: "/posts",
-        params: {
-          city: this.city
-        }
+        params: { city: this.city }
       }).then(res => {
         // console.log(res);
-        console.log(res);
         const { data, total } = res.data;
         this.postData = data;
+        this.postListCache = [...this.postData];
         this.postList = this.postData.slice(0, this.pageSize);
+        // console.log(this.postList);
         this.total = this.postData.length;
+        if (this.$route.query.city) {
+          this.queryCity = this.$route.query.city;
+          this.city = this.queryCity;
+          this.handleSearch();
+        }
       });
     },
     handleSizeChange(val) {
@@ -207,21 +210,40 @@ export default {
         this.pageIndex * this.pageSize
       );
       this.pageIndex = 1;
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.pageIndex = val;
-      this.postList = this.postData.slice(
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       );
+      // console.log(`当前页: ${val}`);
     },
     //点击搜索城市
     handleSearch() {
-      this.getCityList();
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
     },
     handleCity(item) {
       this.city = item;
-      this.getCityList();
+      this.postListCity = this.postListCache.filter(v => {
+        return v.cityName.replace("市", "") === this.city;
+      });
+      this.postList = this.postListCity.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+      this.total = this.postListCity.length;
     }
   }
 };
