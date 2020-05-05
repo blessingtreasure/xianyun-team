@@ -195,7 +195,19 @@ export default {
         // console.log(res);
         console.log(res);
         const { data, total } = res.data;
+        // const arr = data.sort(sortId(id));
         this.postData = data;
+        this.postData.sort((a, b) => {
+          let idA = a.id;
+          let idB = b.id;
+          if (idA < idB) {
+            return 1;
+          }
+          if (idA > idB) {
+            return -1;
+          }
+          return 0;
+        });
         this.postList = this.postData.slice(0, this.pageSize);
         this.total = this.postData.length;
       });
