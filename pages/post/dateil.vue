@@ -465,10 +465,13 @@ this.$axios({
 }
 .gonglue {
   display: flex;
+  align-items: center;
    border-bottom: 1px solid #eee;
   img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
   }
 }
 </style>
