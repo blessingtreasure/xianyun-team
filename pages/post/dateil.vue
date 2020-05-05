@@ -5,7 +5,7 @@
       <el-col :span="15" class="el-cols">
         <div class="title">
           <span @click="$router.push('/post')">旅游攻略</span>
-          <span>/&nbsp攻略详情</span>
+          <span>/&nbsp;攻略详情</span>
         </div>
         <!-- 标题 -->
         <div class="title-h1" v-if="data.length > 0">
@@ -119,17 +119,12 @@
       </el-col>
       <el-col :span="6">
         <div class="verbla">相关攻略</div>
-        <div class="conten">
-          <p>上海</p>
-          <p>2020-04-28 4:36 阅读 15</p>
-        </div>
-        <div class="conten">
-          <p>chumen</p>
-          <p>2020-04-28 23:36 阅读 99</p>
-        </div>
-        <div class="conten">
-          <p>shuain</p>
-          <p>2020-04-29 9:36 阅读 66</p>
+        <div class="gonglue" v-for='(item,index) in postList' :key="index" @click="handleXiangguan(item)">
+          <img v-if="item.images.length>0" :src="item.images[0]" alt />
+          <div class="conten" v-if="item.title!==''">
+            <p >{{item.title}}</p>
+            <p >{{ moment(item.created_at).format("YYYY-MM-DD ")}}  阅读 {{item.watch=null?"0":item.watch}}</p>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -170,7 +165,8 @@ export default {
       },
       placeValue: "说点什么把...",
       fileList: [], //图片的参数
-      pid: ""
+      pid: "",
+      postList: [] //相关推荐
     };
   },
   components: {
@@ -277,6 +273,18 @@ export default {
         this.dataList = data;
         this.total = data.total;
       });
+    },
+    handleXiangguan(item){
+console.log(item);
+this.$axios({
+      url: "/posts",
+      params: {
+        id: item.id
+      }
+    }).then(res => {
+      // 文章详情得数据
+      this.data = res.data.data;
+    });
     }
   },
   mounted() {
@@ -292,6 +300,17 @@ export default {
     });
     // 文章评论
     this.getList();
+    //推荐攻略
+    this.$axios({
+      url: "/posts/recommend",
+      params: {
+        id: this.$route.query.id
+      }
+    }).then(res => {
+      this.postList = res.data.data;
+      console.log(this.postList);
+      
+    });
   }
 };
 </script>
@@ -359,13 +378,14 @@ export default {
   margin: 10px 0;
 }
 .verbla {
+  
   font-size: 18px;
   height: 50px;
   line-height: 50px;
   border-bottom: 1px solid #eee;
 }
 .conten {
-  border-bottom: 1px solid #eee;
+ 
   p:nth-child(1) {
     line-height: 60px;
   }
@@ -442,5 +462,13 @@ export default {
 }
 .el-pagination {
   margin: 20px 35px;
+}
+.gonglue {
+  display: flex;
+   border-bottom: 1px solid #eee;
+  img {
+    width: 100px;
+    height: 100px;
+  }
 }
 </style>
