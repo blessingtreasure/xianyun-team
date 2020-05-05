@@ -56,7 +56,7 @@
               class="shortItem"
               v-for="(item,index) in item.products"
               :key="'products'+index"
-              @click="jumpLink"
+              @click.stop="jumpLink"
             >
               <div class="title">{{item.name}}</div>
               <div class="price">
