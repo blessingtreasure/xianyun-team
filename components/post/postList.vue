@@ -234,11 +234,19 @@ export default {
     },
     //点击搜索城市
     handleSearch() {
-      this.getCityList();
+      if (this.city) {
+        this.getCityList();
+      } else {
+        this.getList();
+      }
     },
     handleCity(item) {
       this.city = item;
-      this.getCityList();
+      if (this.city) {
+        this.getCityList();
+      } else {
+        this.getList();
+      }
     }
   }
 };
