@@ -60,8 +60,10 @@
                 <span>{{ item.cityName }}</span>
                 <span>by</span>
                 <!-- <img :src="'$axios.defaults.baseURL' + item.account.defaultAvatar" /> -->
-                <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
-                <span>{{ item.account.nickname }}</span>
+                <nuxt-link to class="author">
+                  <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
+                  <span>{{ item.account.nickname }}</span>
+                </nuxt-link>
                 <i class="el-icon-view"></i>
                 <span>{{ item.watch||0}}</span>
               </div>
@@ -105,8 +107,11 @@
                   <i class="el-icon-location-outline"></i>
                   <span>{{ item.cityName }}</span>
                   <span>by</span>
-                  <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
-                  <span>{{ item.account.nickname }}</span>
+                  <nuxt-link to class="author">
+                    <img :src="$axios.defaults.baseURL + item.account.defaultAvatar" />
+                    <span>{{ item.account.nickname }}</span>
+                  </nuxt-link>
+
                   <i class="el-icon-view"></i>
                   <span>{{ item.watch||0 }}</span>
                 </div>
@@ -284,7 +289,11 @@ export default {
     border-bottom: 2px solid orange;
   }
 }
-
+.author {
+  span {
+    color: orange;
+  }
+}
 .listBox {
   .list-item {
     border-bottom: 1px solid #ddd;
