@@ -172,6 +172,11 @@
 <script>
 import moment from "moment";
 export default {
+  watch: {
+    $route() {
+      if (this.$route.query.city) console.log(this.$route);
+    }
+  },
   computed: {
     //   监听location坐标的变化，更新地图
     getlocation() {
