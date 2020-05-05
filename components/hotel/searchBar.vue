@@ -191,6 +191,13 @@ export default {
     }
   },
   mounted() {
+    // 当路由发生变化时执行
+    if (this.$route.query.city) {
+      this.city = this.$route.query.city;
+      this.getScenics();
+      this.searchInfo();
+      return;
+    }
     // 首次进入获取当前城市列表
     this.dialogVisible = !this.$store.state.hotel.IsshowMap;
     if (this.dialogVisible) {

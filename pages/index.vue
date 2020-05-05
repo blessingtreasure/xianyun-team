@@ -36,6 +36,7 @@
           <input
             :placeholder="options[current].value"
             @keyup.enter="handleSearchCity"
+            @blur="handleSearchCity"
             v-model="city"
           />
           <i class="el-icon-search"></i>
@@ -85,10 +86,18 @@ export default {
       this.current = index;
     },
     handleSearchCity() {
-      if (this.current == 0) {
+      if (this.current == 0 && this.city.trim() !== "") {
         this.$router.push({
           path: "/post",
           query: { city: this.city }
+        });
+      }
+      if (this.current === 1 && this.city.trim() !== "") {
+        this.$router.push({
+          path: "/hotel",
+          query: {
+            city: this.city
+          }
         });
       }
     }
